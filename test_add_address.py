@@ -110,7 +110,8 @@ class TestAddGroup(unittest.TestCase):
     def press_bottom_enter_button(self, wd):
         wd.find_element_by_xpath("(//input[@name='submit'])[2]").click()
 
-    def test_add_address(self):
+    def test_add_address_top_but(self):
+        # test with top "enter" button
         wd = self.wd
         self.open_home_page(wd)
         self.login(wd, username="admin", password="secret")
@@ -136,6 +137,37 @@ class TestAddGroup(unittest.TestCase):
                                     aday=23, amonth=7, ayear="2022")
                                )
         self.press_top_enter_button(wd)
+        self.return_to_home_page(wd)
+        self.logout(wd)
+
+
+    def test_add_address_bot_but(self):
+        # test with bottom "enter" button
+        wd = self.wd
+        self.open_home_page(wd)
+        self.login(wd, username="admin", password="secret")
+        self.open_new_address_form(wd)
+        self.fill_address_form(wd,
+                               Name(first_name="Валерий",
+                                    mid_name="Непомню",
+                                    last_name="Меладзе",
+                                    nick_name="СТОШАГОВНАЗАД"),
+                               Other(title="сингер",
+                                     photo="",
+                                     company='ООО "Я Продюсер ВИА ГРЫ"'),
+                               Address(address="7777777, г.Меладзовское, ул.Певцова, д.3"),
+                               Phone(mob_tel="+7(123)456 78 94",
+                                     work_tel="+7(123)456 78 95",
+                                     home_tel="+7(123)456 78 96",
+                                     fax_tel="+7(123)456 78 97"),
+                               Email(email="email4@mail.ru",
+                                     email_2="email5@mail.ru",
+                                     email_3="email6@mail.ru",
+                                     homepage_url="https:\\www.homepage2.com"),
+                               Date(bday=21, bmonth=2, byear="1993",
+                                    aday=14, amonth=3, ayear="2023")
+                               )
+        self.press_bottom_enter_button(wd)
         self.return_to_home_page(wd)
         self.logout(wd)
 
