@@ -9,7 +9,7 @@ import unittest, time, re
 
 class UntitledTestCase(unittest.TestCase):
     def setUp(self):
-        self.wd = webdriver.Firefox(executable_path=r'C:\Windows\SysWOW64\geckodriver.exe')
+        self.wd = webdriver.Firefox()
         self.wd.implicitly_wait(30)
 
     
