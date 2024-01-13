@@ -151,7 +151,7 @@ class TestAddGroup(unittest.TestCase):
                                Name(first_name="Валерий",
                                     mid_name="Непомню",
                                     last_name="Меладзе",
-                                    nick_name="СТОШАГОВНАЗАД"),
+                                    nick_name="Я_КРАСИВЫЙ"),
                                Other(title="сингер",
                                      photo="",
                                      company='ООО "Я Продюсер ВИА ГРЫ"'),
