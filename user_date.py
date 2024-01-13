@@ -35,7 +35,7 @@ class Email:
 
 
 class Date:
-    # should be date in dd month yyyy formate (22 june 1992, 13 january 2024)
+    # only hardcode now :)
     def __init__(self, bday, bmonth, byear, aday, amonth, ayear):
         self.bday = bday
         self.bmonth = bmonth
