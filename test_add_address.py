@@ -101,17 +101,19 @@ class TestAddGroup(unittest.TestCase):
         wd.find_element_by_xpath("//a[normalize-space()='home']").click()
 
     def add_next_address(self, wd):
-            # return to home page
-            wd.find_element_by_xpath("//a[normalize-space()='add next']").click()
+        # return to form for add next address
+        wd.find_element_by_xpath("//a[normalize-space()='add next']").click()
 
     def logout(self, wd):
         # logout
         wd.find_element_by_link_text("Logout").click()
 
     def press_top_enter_button(self, wd):
+        # top "enter" button usage
         wd.find_element_by_xpath("(//input[@name='submit'])[1]").click()
 
     def press_bottom_enter_button(self, wd):
+        # bottom "enter" button usage
         wd.find_element_by_xpath("(//input[@name='submit'])[2]").click()
 
     def test_add_address_top_but(self):
@@ -142,28 +144,9 @@ class TestAddGroup(unittest.TestCase):
                                )
         self.press_top_enter_button(wd)
         self.add_next_address(wd)
-        self.fill_address_form(wd,
-                               Name(first_name="Проверка",
-                                    mid_name="Кнопки",
-                                    last_name="НЕКСТ",
-                                    nick_name="NEXT"),
-                               Other(title="Кнопка",
-                                     photo="",
-                                     company='ООО "Хочукнопка а хочуссылка"'),
-                               Address(address="Хатетепешная область, г.связьпотерявшее, ул.отвалов, д.500"),
-                               Phone(mob_tel="+7(123)456 78 94",
-                                     work_tel="+7(123)456 78 95",
-                                     home_tel="+7(123)456 78 96",
-                                     fax_tel="+7(123)456 78 97"),
-                               Email(email="email4@mail.ru",
-                                     email_2="email5@mail.ru",
-                                     email_3="email6@mail.ru",
-                                     homepage_url="https:\\www.homepage2.com"),
-                               Date(bday=21, bmonth=2, byear="1993",
-                                    aday=14, amonth=3, ayear="2023")
-                               )
-        self.press_bottom_enter_button(wd)
+        # check that next address link also is working and go to home page
         self.return_to_home_page(wd)
+        # and logout
         self.logout(wd)
 
 
