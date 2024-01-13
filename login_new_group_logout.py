@@ -16,7 +16,9 @@ class UntitledTestCase(unittest.TestCase):
     def test_untitled_test_case(self):
         wd = self.wd
         wd.get("http://localhost/addressbook/")
+        wd.find_element_by_xpath("//input[@name='user']").click()
         wd.find_element_by_xpath("//input[@name='user']").send_keys("admin")
+        wd.find_element_by_xpath("//input[@name='pass']").click()
         wd.find_element_by_xpath("//input[@name='pass']").send_keys("secret")
         wd.find_element_by_xpath("//input[@value='Login']").click()
         wd.find_element_by_link_text("groups").click()
