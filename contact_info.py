@@ -73,12 +73,39 @@ class Date:
         # год у нас просто поле
         self.ayear = ayear
 
+
 # class Date:
-#     # если выбран селектор даты и месяца по CSS селектору - закоментить предыдущий Date: и раскомментировать этот
+#         # для перехода на эту версию - эту раскомментировать а версию выше закомментировать
 #     def __init__(self, bday, bmonth, byear, aday, amonth, ayear):
+#         self.byear = byear   # и a и b - вообще не трогаем изменение данных, может быть добавлю проверку на
+#         self.ayear = ayear   # 4х значный формат если надо будет
+#
+#         # Убран пересчёт дней и месяцев, но оставлена проверка вводимых данных
+#         bday = int(bday)
+#         if (bday >= 1) and (bday <= 31):
+#             bday = bday
+#         else:
+#             bday = 2
 #         self.bday = bday
-#         self.bmonth = bmonth
-#         self.byear = byear
+#
+#         aday = int(aday)
+#         if (aday >= 1) and (aday <= 31):
+#             aday = aday
+#         else:
+#             aday = 2
 #         self.aday = aday
+#
+#         # аналогично для месяца
+#         bmonth = int(bmonth)
+#         if (bmonth >= 1) and (bmonth <= 12):
+#             bmonth = bmonth
+#         else:
+#             bmonth = 1
+#         self.bmonth = bmonth
+#
+#         amonth = int(amonth)
+#         if (amonth >= 1) and (amonth <= 12):
+#             amonth = amonth
+#         else:
+#             amonth = 1
 #         self.amonth = amonth
-#         self.ayear = ayear
