@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from selenium import webdriver
 import unittest
-from user_date import Name, Other, Address, Phone, Email, Date
+from contact_info import Name, Other, Address, Phone, Email, Date
 
 
 class TestAddGroup(unittest.TestCase):
