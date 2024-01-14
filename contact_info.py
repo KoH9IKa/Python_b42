@@ -66,10 +66,19 @@ class Date:
         # аналогично для месяца
         amonth = int(amonth)
         if (amonth >= 1) and (amonth <= 12):
-            amonth +=1
+            amonth += 1
         else:
             amonth = 1
         self.amonth = amonth
         # год у нас просто поле
         self.ayear = ayear
 
+# class Date:
+#     # если выбран селектор даты и месяца по CSS селектору - закоментить предыдущий Date: и раскомментировать этот
+#     def __init__(self, bday, bmonth, byear, aday, amonth, ayear):
+#         self.bday = bday
+#         self.bmonth = bmonth
+#         self.byear = byear
+#         self.aday = aday
+#         self.amonth = amonth
+#         self.ayear = ayear
