@@ -35,11 +35,41 @@ class Email:
 
 
 class Date:
-    # only hardcode now :)
+    # пересчёт дня и месяца на то что бы введёное в тесте = введёное в форму из-за разности цифр локатора и месяцев
     def __init__(self, bday, bmonth, byear, aday, amonth, ayear):
+        # так как локатор на пустое поле [2] а на 31й день [33] то
+        # нам надо добавить 2 к, например, 15 что бы в дату ввелось не 13 а 15е число
+        bday = int(bday)
+        if (bday >= 1) and (bday <= 31):
+            bday += 2
+        else:
+            bday = 2
+
         self.bday = bday
+        # аналогично для месяца
+        bmonth = int(bmonth)
+        if (bmonth >= 1) and (bmonth <= 12):
+            bmonth += 1
+        else:
+            bmonth = 1
         self.bmonth = bmonth
+        # год у нас просто поле
         self.byear = byear
+        # так как локатор на пустое поле [2] а на 31й день [33] то
+        # нам надо добавить 2 к, например, 15 что бы в дату ввелось не 13 а 15е число
+        aday = int(aday)
+        if (aday >= 1) and (aday <= 31):
+            aday += 2
+        else:
+            aday = 2
         self.aday = aday
+        # аналогично для месяца
+        amonth = int(amonth)
+        if (amonth >= 1) and (amonth <= 12):
+            amonth +=1
+        else:
+            amonth = 1
         self.amonth = amonth
+        # год у нас просто поле
         self.ayear = ayear
+

@@ -80,18 +80,26 @@ class TestAddGroup(unittest.TestCase):
         wd.find_element_by_xpath("//input[@name='work']").clear()
         wd.find_element_by_xpath("//input[@name='work']").send_keys(phone.work_tel)
         # Born date setting
+        # ввод пересчитанного дня для корректного ввода(2 это "-", а 33 это "31" число)
+        bday_locator = f'/html/body/div/div[4]/form/select[1]/option[{date.bday}]'
         wd.find_element_by_xpath("//select[@name='bday']").click()
-        wd.find_element_by_xpath("/html/body/div/div[4]/form/select[1]/option[10]").click()
+        wd.find_element_by_xpath(bday_locator).click()
+        # ввод пересчитанного месяца корректного ввода(1 это "-" а 13 это "December")
+        bmonth_locator = f'/html/body/div/div[4]/form/select[2]/option[{date.bmonth}]'
         wd.find_element_by_xpath("//select[@name='bmonth']").click()
-        wd.find_element_by_xpath("/html/body/div/div[4]/form/select[2]/option[6]").click()
+        wd.find_element_by_xpath(bmonth_locator).click()
+        # год не трогаем, там просто инпут
         wd.find_element_by_xpath("(//input[@name='byear'])[1]").click()
         wd.find_element_by_xpath("(//input[@name='byear'])[1]").clear()
         wd.find_element_by_xpath("(//input[@name='byear'])[1]").send_keys(date.byear)
         # Anniversary date setting
+        # ввод пересчитанного дня для корректного ввода(2 это "-", а 33 это "31" число)
+        aday_locator = f'/html/body/div/div[4]/form/select[3]/option[{date.aday}]'
         wd.find_element_by_xpath("//select[@name='aday']").click()
-        wd.find_element_by_xpath("/html/body/div/div[4]/form/select[3]/option[10]").click()
+        wd.find_element_by_xpath(aday_locator).click()
+        amonth_locator = f'/html/body/div/div[4]/form/select[4]/option[{date.amonth}]'
         wd.find_element_by_xpath("//select[@name='amonth']").click()
-        wd.find_element_by_xpath("/html/body/div/div[4]/form/select[4]/option[6]").click()
+        wd.find_element_by_xpath(amonth_locator).click()
         wd.find_element_by_xpath("(//input[@name='ayear'])[1]").click()
         wd.find_element_by_xpath("(//input[@name='ayear'])[1]").clear()
         wd.find_element_by_xpath("(//input[@name='ayear'])[1]").send_keys(date.ayear)
@@ -139,8 +147,8 @@ class TestAddGroup(unittest.TestCase):
                                      email_2="email2@mail.ru",
                                      email_3="email3@mail.ru",
                                      homepage_url="https:\\www.homepage.com"),
-                               Date(bday="", bmonth="", byear="1992",
-                                    aday="", amonth="", ayear="2022")
+                               Date(bday="32", bmonth="33", byear="1995",  # невалидный дд мм
+                                    aday="35", amonth="33", ayear="2022")  # невалидный дд мм
                                )
         self.press_top_enter_button(wd)
         self.add_next_address(wd)
@@ -148,7 +156,6 @@ class TestAddGroup(unittest.TestCase):
         self.return_to_home_page(wd)
         # and logout
         self.logout(wd)
-
 
     def test_add_address_bot_but(self):
         # test with bottom "enter" button
@@ -173,13 +180,12 @@ class TestAddGroup(unittest.TestCase):
                                      email_2="email5@mail.ru",
                                      email_3="email6@mail.ru",
                                      homepage_url="https:\\www.homepage2.com"),
-                               Date(bday="", bmonth=2, byear="1993",
-                                    aday="", amonth=3, ayear="2023")
+                               Date(bday="31", bmonth="1", byear="1993",  # валидный дд мм
+                                    aday="1", amonth="12", ayear="2023")  # валидный дд мм
                                )
         self.press_bottom_enter_button(wd)
         self.return_to_home_page(wd)
         self.logout(wd)
-
 
     def tearDown(self):
         self.wd.quit()
