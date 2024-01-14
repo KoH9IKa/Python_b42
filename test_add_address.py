@@ -80,20 +80,16 @@ class TestAddGroup(unittest.TestCase):
         wd.find_element_by_xpath("//input[@name='work']").clear()
         wd.find_element_by_xpath("//input[@name='work']").send_keys(phone.work_tel)
         # Born date setting
-        # ввод пересчитанного дня для корректного ввода(2 это "-", а 33 это "31" число)
         bday_locator = f'/html/body/div/div[4]/form/select[1]/option[{date.bday}]'
         wd.find_element_by_xpath("//select[@name='bday']").click()
         wd.find_element_by_xpath(bday_locator).click()
-        # ввод пересчитанного месяца корректного ввода(1 это "-" а 13 это "December")
         bmonth_locator = f'/html/body/div/div[4]/form/select[2]/option[{date.bmonth}]'
         wd.find_element_by_xpath("//select[@name='bmonth']").click()
         wd.find_element_by_xpath(bmonth_locator).click()
-        # год не трогаем, там просто инпут
         wd.find_element_by_xpath("(//input[@name='byear'])[1]").click()
         wd.find_element_by_xpath("(//input[@name='byear'])[1]").clear()
         wd.find_element_by_xpath("(//input[@name='byear'])[1]").send_keys(date.byear)
         # Anniversary date setting
-        # ввод пересчитанного дня для корректного ввода(2 это "-", а 33 это "31" число)
         aday_locator = f'/html/body/div/div[4]/form/select[3]/option[{date.aday}]'
         wd.find_element_by_xpath("//select[@name='aday']").click()
         wd.find_element_by_xpath(aday_locator).click()
