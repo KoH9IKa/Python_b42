@@ -2,6 +2,7 @@
 from selenium import webdriver
 import unittest
 import keyboard
+import time
 from contact_info import Name, Other, Address, Phone, Email, Date
 
 
@@ -80,15 +81,20 @@ class TestAddNewAddress(unittest.TestCase):
         wd.find_element_by_xpath("//input[@name='work']").click()
         wd.find_element_by_xpath("//input[@name='work']").clear()
         wd.find_element_by_xpath("//input[@name='work']").send_keys(phone.work_tel)
-        # Born date setting
-        # bday_locator = f'//option[. = {date.bday}]'  # не работает
-        bday_locator = f'/html/body/div/div[4]/form/select[1]/option[{date.bday}]'  # работает, но лок-р может сломаться
+        # Born date settings
+
+        # вариант 1 - по css, но надо убрать пересчёт даты
+        # bday_locator = f'select[name="bday"] > option[value="{date.bday}"]'
+        # wd.find_element_by_xpath("//select[@name='bday']").click()
+        # time.sleep(0.5)
+        # wd.find_element_by_css_selector(bday_locator).click()
+
+        # вариант 2 - по full_xpath, но для него надо пересчитывать дату(уже пересчитывается автоматически)
+        bday_locator = f'/html/body/div/div[4]/form/select[1]/option[{date.bday}]'
         wd.find_element_by_xpath("//select[@name='bday']").click()
         wd.find_element_by_xpath(bday_locator).click()
-        # wd.find_element_by_xpath(f'//option[. = {date.bday}]').clic()  # через такой локатор не работает
-        # wd.keyboard.press('Enter')  # не работает через нажатие
-        # wd.keyboard.release('Enter')  # не работает и через отпускание ентера
-        # keyboard.press_and_release('Enter')  # не работает через нажатие + отпускание ентера
+
+
         bmonth_locator = f'/html/body/div/div[4]/form/select[2]/option[{date.bmonth}]'
         wd.find_element_by_xpath("//select[@name='bmonth']").click()
         wd.find_element_by_xpath(bmonth_locator).click()
@@ -182,7 +188,7 @@ class TestAddNewAddress(unittest.TestCase):
                                      email_2="email5@mail.ru",
                                      email_3="email6@mail.ru",
                                      homepage_url="https:\\www.homepage2.com"),
-                               Date(bday="31", bmonth="1", byear="1993",  # валидный дд мм
+                               Date(bday="29", bmonth="1", byear="1993",  # валидный дд мм
                                     aday="1", amonth="12", ayear="2023")  # валидный дд мм
                                )
         self.press_bottom_enter_button(wd)
