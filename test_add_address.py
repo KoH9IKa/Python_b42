@@ -139,8 +139,8 @@ class TestAddGroup(unittest.TestCase):
                                      email_2="email2@mail.ru",
                                      email_3="email3@mail.ru",
                                      homepage_url="https:\\www.homepage.com"),
-                               Date(bday="", bmonth=7, byear="1992",
-                                    aday="", amonth=7, ayear="2022")
+                               Date(bday="", bmonth="", byear="1992",
+                                    aday="", amonth="", ayear="2022")
                                )
         self.press_top_enter_button(wd)
         self.add_next_address(wd)
