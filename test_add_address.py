@@ -83,7 +83,7 @@ class TestAddNewAddress(unittest.TestCase):
         wd.find_element_by_xpath("//input[@name='work']").send_keys(phone.work_tel)
         # Born date settings
 
-        # вариант 1 - по css, но надо убрать пересчёт даты
+        # # вариант 1 - по css, но надо убрать пересчёт даты
         # bday_locator = f'select[name="bday"] > option[value="{date.bday}"]'
         # wd.find_element_by_xpath("//select[@name='bday']").click()
         # time.sleep(0.5)
@@ -93,7 +93,6 @@ class TestAddNewAddress(unittest.TestCase):
         bday_locator = f'/html/body/div/div[4]/form/select[1]/option[{date.bday}]'
         wd.find_element_by_xpath("//select[@name='bday']").click()
         wd.find_element_by_xpath(bday_locator).click()
-
 
         bmonth_locator = f'/html/body/div/div[4]/form/select[2]/option[{date.bmonth}]'
         wd.find_element_by_xpath("//select[@name='bmonth']").click()
