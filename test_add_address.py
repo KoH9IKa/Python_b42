@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 from selenium import webdriver
 import unittest
+import keyboard
 from contact_info import Name, Other, Address, Phone, Email, Date
 
 
-class TestAddGroup(unittest.TestCase):
+class TestAddNewAddress(unittest.TestCase):
     def setUp(self):
         self.wd = webdriver.Firefox()
         self.wd.implicitly_wait(30)
@@ -80,9 +81,14 @@ class TestAddGroup(unittest.TestCase):
         wd.find_element_by_xpath("//input[@name='work']").clear()
         wd.find_element_by_xpath("//input[@name='work']").send_keys(phone.work_tel)
         # Born date setting
-        bday_locator = f'/html/body/div/div[4]/form/select[1]/option[{date.bday}]'
+        # bday_locator = f'//option[. = {date.bday}]'  # не работает
+        bday_locator = f'/html/body/div/div[4]/form/select[1]/option[{date.bday}]'  # работает, но лок-р может сломаться
         wd.find_element_by_xpath("//select[@name='bday']").click()
         wd.find_element_by_xpath(bday_locator).click()
+        # wd.find_element_by_xpath(f'//option[. = {date.bday}]').clic()  # через такой локатор не работает
+        # wd.keyboard.press('Enter')  # не работает через нажатие
+        # wd.keyboard.release('Enter')  # не работает и через отпускание ентера
+        # keyboard.press_and_release('Enter')  # не работает через нажатие + отпускание ентера
         bmonth_locator = f'/html/body/div/div[4]/form/select[2]/option[{date.bmonth}]'
         wd.find_element_by_xpath("//select[@name='bmonth']").click()
         wd.find_element_by_xpath(bmonth_locator).click()
