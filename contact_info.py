@@ -34,12 +34,11 @@ class Email:
         self.homepage_url = homepage_url
 
 class Date:
-    # пересчёт дня и месяца на то что бы введёное в тесте = введёное в форму из-за разности цифр локатора и месяцев
     def __init__(self, bday, bmonth, byear, aday, amonth, ayear):
         self.byear = byear  # и a и b - вообще не трогаем изменение данных, может быть добавлю проверку на
         self.ayear = ayear  # 4х значный формат если надо будет
 
-        # Убран пересчёт дней и месяцев, но оставлена проверка вводимых данных
+        # проверка вводимых данных, если не 1-31 то 0 (в селекторе будет выбран "-")
         bday = int(bday)
         if bday < 1 or bday > 31:
             bday = 0
@@ -54,27 +53,27 @@ class Date:
             aday = aday
         self.aday = aday
 
-        # аналогично для месяца
+        # аналогично для месяца + выбор по номеру месяца из теста - значение которое будет выбрано в селекторе
         bmonth = int(bmonth)
         blist = (
             "January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
             "November", "December")
-        if (bmonth >= 1) and (bmonth <= 12):
+        if bmonth < 1 or bmonth > 12:
+            bmonth = "-"
+        else:
             i = bmonth - 1
             bmonth = blist[i]
-        else:
-            bmonth = "-"
         self.bmonth = bmonth
 
         amonth = int(amonth)
         alist = (
             "January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
             "November", "December")
-        if (amonth >= 1) and (amonth <= 12):
+        if amonth < 1 or amonth > 12:
+            amonth = "-"
+        else:
             i = amonth - 1
             amonth = alist[i]
-        else:
-            amonth = "-"
         self.amonth = amonth
 
 
