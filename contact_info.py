@@ -39,14 +39,14 @@ class Date:
         self.aday = aday
         # аналогично для месяца + выбор по номеру месяца из теста = значение которое будет выбрано в селекторе
         bmonth = int(bmonth)
-        list = (
+        montlist = (
             "January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
             "November", "December")
         if bmonth < 1 or bmonth > 12:
             bmonth = "-"
         else:
             i = bmonth - 1
-            bmonth = list[i]
+            bmonth = montlist[i]
         self.bmonth = bmonth
         # то же самое для amonth
         amonth = int(amonth)
@@ -54,5 +54,5 @@ class Date:
             amonth = "-"
         else:
             i = amonth - 1
-            amonth = list[i]
+            amonth = montlist[i]
         self.amonth = amonth
