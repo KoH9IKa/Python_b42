@@ -3,7 +3,7 @@ from selenium import webdriver
 import unittest
 import keyboard
 import time
-from contact_info import Name, Other, Address, Phone, Email, Date
+from contact_info import Contact, Date
 
 
 class TestAddNewAddress(unittest.TestCase):
@@ -27,86 +27,81 @@ class TestAddNewAddress(unittest.TestCase):
         # open "new address" page
         wd.find_element_by_link_text("add new").click()
 
-    def fill_address_form(self, wd, name, other, address, phone, email, date):
+    def fill_address_form(self, wd, contact, date):
         # fill name/midname/lastname/nickname
         wd.find_element_by_xpath("//input[@name='firstname']").click()
         wd.find_element_by_xpath("//input[@name='firstname']").clear()
-        wd.find_element_by_xpath("//input[@name='firstname']").send_keys(name.first_name)
+        wd.find_element_by_xpath("//input[@name='firstname']").send_keys(contact.first_name)
         wd.find_element_by_xpath("//input[@name='middlename']").click()
         wd.find_element_by_xpath("//input[@name='middlename']").clear()
-        wd.find_element_by_xpath("//input[@name='middlename']").send_keys(name.mid_name)
+        wd.find_element_by_xpath("//input[@name='middlename']").send_keys(contact.mid_name)
         wd.find_element_by_xpath("//input[@name='lastname']").click()
         wd.find_element_by_xpath("//input[@name='lastname']").clear()
-        wd.find_element_by_xpath("//input[@name='lastname']").send_keys(name.last_name)
+        wd.find_element_by_xpath("//input[@name='lastname']").send_keys(contact.last_name)
         wd.find_element_by_xpath("//input[@name='nickname']").click()
         wd.find_element_by_xpath("//input[@name='nickname']").clear()
-        wd.find_element_by_xpath("//input[@name='nickname']").send_keys(name.nick_name)
+        wd.find_element_by_xpath("//input[@name='nickname']").send_keys(contact.nick_name)
         # fill other information
         wd.find_element_by_xpath("//input[@name='title']").click()
         wd.find_element_by_xpath("//input[@name='title']").clear()
-        wd.find_element_by_xpath("//input[@name='title']").send_keys(other.title)
+        wd.find_element_by_xpath("//input[@name='title']").send_keys(contact.title)
         wd.find_element_by_xpath("//input[@name='company']").click()
         wd.find_element_by_xpath("//input[@name='company']").clear()
-        wd.find_element_by_xpath("//input[@name='company']").send_keys(other.company)
+        wd.find_element_by_xpath("//input[@name='company']").send_keys(contact.company)
         # fill address field
         wd.find_element_by_xpath("//textarea[@name='address']").click()
         wd.find_element_by_xpath("//textarea[@name='address']").clear()
-        wd.find_element_by_xpath("//textarea[@name='address']").send_keys(address.address)
+        wd.find_element_by_xpath("//textarea[@name='address']").send_keys(contact.address)
         # fill phones & fax
         wd.find_element_by_xpath("//input[@name='home']").click()
         wd.find_element_by_xpath("//input[@name='home']").clear()
-        wd.find_element_by_xpath("//input[@name='home']").send_keys(phone.home_tel)
+        wd.find_element_by_xpath("//input[@name='home']").send_keys(contact.home_tel)
         wd.find_element_by_xpath("//input[@name='mobile']").click()
         wd.find_element_by_xpath("//input[@name='mobile']").clear()
-        wd.find_element_by_xpath("//input[@name='mobile']").send_keys(phone.mob_tel)
+        wd.find_element_by_xpath("//input[@name='mobile']").send_keys(contact.mob_tel)
         wd.find_element_by_xpath("//input[@name='work']").click()
         wd.find_element_by_xpath("//input[@name='work']").clear()
-        wd.find_element_by_xpath("//input[@name='work']").send_keys(phone.work_tel)
+        wd.find_element_by_xpath("//input[@name='work']").send_keys(contact.work_tel)
         wd.find_element_by_xpath("//input[@name='fax']").click()
         wd.find_element_by_xpath("//input[@name='fax']").clear()
-        wd.find_element_by_xpath("//input[@name='fax']").send_keys(phone.fax_tel)
+        wd.find_element_by_xpath("//input[@name='fax']").send_keys(contact.fax_tel)
         # fill email & homepage url
         wd.find_element_by_xpath("//input[@name='email']").click()
         wd.find_element_by_xpath("//input[@name='email']").clear()
-        wd.find_element_by_xpath("//input[@name='email']").send_keys(email.email)
+        wd.find_element_by_xpath("//input[@name='email']").send_keys(contact.email)
         wd.find_element_by_xpath("//input[@name='email2']").click()
         wd.find_element_by_xpath("//input[@name='email2']").clear()
-        wd.find_element_by_xpath("//input[@name='email2']").send_keys(email.email_2)
+        wd.find_element_by_xpath("//input[@name='email2']").send_keys(contact.email_2)
         wd.find_element_by_xpath("//input[@name='email3']").click()
         wd.find_element_by_xpath("//input[@name='email3']").clear()
-        wd.find_element_by_xpath("//input[@name='email3']").send_keys(email.email_3)
+        wd.find_element_by_xpath("//input[@name='email3']").send_keys(contact.email_3)
         wd.find_element_by_xpath("//input[@name='homepage']").click()
         wd.find_element_by_xpath("//input[@name='homepage']").clear()
-        wd.find_element_by_xpath("//input[@name='homepage']").send_keys(email.homepage_url)
+        wd.find_element_by_xpath("//input[@name='homepage']").send_keys(contact.homepage_url)
         wd.find_element_by_xpath("//input[@name='work']").click()
         wd.find_element_by_xpath("//input[@name='work']").clear()
-        wd.find_element_by_xpath("//input[@name='work']").send_keys(phone.work_tel)
-        # Born date settings
-
-        # # вариант 1 - по css, но надо убрать пересчёт даты
-        # bday_locator = f'select[name="bday"] > option[value="{date.bday}"]'
-        # wd.find_element_by_xpath("//select[@name='bday']").click()
-        # time.sleep(0.5)
-        # wd.find_element_by_css_selector(bday_locator).click()
-
-        # вариант 2 - по full_xpath, но для него надо пересчитывать дату(уже пересчитывается автоматически)
-        bday_locator = f'/html/body/div/div[4]/form/select[1]/option[{date.bday}]'
+        wd.find_element_by_xpath("//input[@name='work']").send_keys(contact.work_tel)
+        # Born date setting
+        bday_locator = f'select[name="bday"] > option[value="{date.bday}"]'
         wd.find_element_by_xpath("//select[@name='bday']").click()
-        wd.find_element_by_xpath(bday_locator).click()
-
-        bmonth_locator = f'/html/body/div/div[4]/form/select[2]/option[{date.bmonth}]'
+        wd.find_element_by_css_selector(bday_locator).click()
+        # Born month setting
+        bmonth_locator = f'select[name="bmonth"] > option[value="{date.bmonth}"]'
         wd.find_element_by_xpath("//select[@name='bmonth']").click()
-        wd.find_element_by_xpath(bmonth_locator).click()
+        wd.find_element_by_css_selector(bmonth_locator).click()
+        # Born year setting
         wd.find_element_by_xpath("(//input[@name='byear'])[1]").click()
         wd.find_element_by_xpath("(//input[@name='byear'])[1]").clear()
         wd.find_element_by_xpath("(//input[@name='byear'])[1]").send_keys(date.byear)
         # Anniversary date setting
-        aday_locator = f'/html/body/div/div[4]/form/select[3]/option[{date.aday}]'
+        aday_locator = f'select[name="aday"] > option[value="{date.aday}"]'
         wd.find_element_by_xpath("//select[@name='aday']").click()
-        wd.find_element_by_xpath(aday_locator).click()
-        amonth_locator = f'/html/body/div/div[4]/form/select[4]/option[{date.amonth}]'
-        wd.find_element_by_xpath("//select[@name='amonth']").click()
-        wd.find_element_by_xpath(amonth_locator).click()
+        wd.find_element_by_css_selector(aday_locator).click()
+        # Anniversary month setting
+        amonth_locator = f'select[name="amonth"] > option[value="{date.amonth}"]'
+        wd.find_element_by_xpath("//select[@name='bmonth']").click()
+        wd.find_element_by_css_selector(amonth_locator).click()
+        # Anniversary year setting
         wd.find_element_by_xpath("(//input[@name='ayear'])[1]").click()
         wd.find_element_by_xpath("(//input[@name='ayear'])[1]").clear()
         wd.find_element_by_xpath("(//input[@name='ayear'])[1]").send_keys(date.ayear)
@@ -137,23 +132,24 @@ class TestAddNewAddress(unittest.TestCase):
         self.open_home_page(wd)
         self.login(wd, username="admin", password="secret")
         self.open_new_address_form(wd)
+        # Мессяц вводить числом от 1 до 12
         self.fill_address_form(wd,
-                               Name(first_name="Константин",
-                                    mid_name="Андреевич",
-                                    last_name="Верченко",
-                                    nick_name="Костян"),
-                               Other(title="QA Eng.",
-                                     photo="",
-                                     company='ООО "Мартышка и очки"'),
-                               Address(address="298300, г.Васюканск, ул.Из Костылей Строителей, д.404"),
-                               Phone(mob_tel="+7(123)456 78 90",
-                                     work_tel="+7(123)456 78 91",
-                                     home_tel="+7(123)456 78 92",
-                                     fax_tel="+7(123)456 78 93"),
-                               Email(email="email1@mail.ru",
-                                     email_2="email2@mail.ru",
-                                     email_3="email3@mail.ru",
-                                     homepage_url="https:\\www.homepage.com"),
+                               Contact(first_name="Константин",
+                                       mid_name="Андреевич",
+                                       last_name="Верченко",
+                                       nick_name="Костян",
+                                       title="QA Eng.",
+                                       photo="",
+                                       company='ООО "Мартышка и очки"',
+                                       address="298300, г.Васюканск, ул.Из Костылей Строителей, д.404",
+                                       mob_tel="+7(123)456 78 90",
+                                       work_tel="+7(123)456 78 91",
+                                       home_tel="+7(123)456 78 92",
+                                       fax_tel="+7(123)456 78 93",
+                                       email="email1@mail.ru",
+                                       email_2="email2@mail.ru",
+                                       email_3="email3@mail.ru",
+                                       homepage_url="https:\\www.homepage.com"),
                                Date(bday="32", bmonth="33", byear="1995",  # невалидный дд мм
                                     aday="35", amonth="33", ayear="2022")  # невалидный дд мм
                                )
@@ -170,23 +166,24 @@ class TestAddNewAddress(unittest.TestCase):
         self.open_home_page(wd)
         self.login(wd, username="admin", password="secret")
         self.open_new_address_form(wd)
+        # Месяц вводить числом от 1 до 12
         self.fill_address_form(wd,
-                               Name(first_name="Валерий",
-                                    mid_name="Непомню",
-                                    last_name="Меладзе",
-                                    nick_name="Я_КРАСИВЫЙ"),
-                               Other(title="сингер",
-                                     photo="",
-                                     company='ООО "Я Продюсер ВИА ГРЫ"'),
-                               Address(address="7777777, г.Меладзовское, ул.Певцова, д.3"),
-                               Phone(mob_tel="+7(123)456 78 98",
-                                     work_tel="+7(123)456 78 99",
-                                     home_tel="+7(123)456 78 10",
-                                     fax_tel="+7(123)456 78 11"),
-                               Email(email="email4@mail.ru",
-                                     email_2="email5@mail.ru",
-                                     email_3="email6@mail.ru",
-                                     homepage_url="https:\\www.homepage2.com"),
+                               Contact(first_name="Валерий",
+                                       mid_name="Непомню",
+                                       last_name="Меладзе",
+                                       nick_name="Я_КРАСИВЫЙ",
+                                       title="сингер",
+                                       photo="",
+                                       company='ООО "Я Продюсер ВИА ГРЫ"',
+                                       address="7777777, г.Меладзовское, ул.Певцова, д.3",
+                                       mob_tel="+7(123)456 78 98",
+                                       work_tel="+7(123)456 78 99",
+                                       home_tel="+7(123)456 78 10",
+                                       fax_tel="+7(123)456 78 11",
+                                       email="email4@mail.ru",
+                                       email_2="email5@mail.ru",
+                                       email_3="email6@mail.ru",
+                                       homepage_url="https:\\www.homepage2.com"),
                                Date(bday="29", bmonth="1", byear="1993",  # валидный дд мм
                                     aday="1", amonth="12", ayear="2023")  # валидный дд мм
                                )
