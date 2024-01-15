@@ -33,79 +33,89 @@ class Email:
         self.email_3 = email_3
         self.homepage_url = homepage_url
 
-
 class Date:
     # пересчёт дня и месяца на то что бы введёное в тесте = введёное в форму из-за разности цифр локатора и месяцев
     def __init__(self, bday, bmonth, byear, aday, amonth, ayear):
-        # так как локатор на пустое поле [2] а на 31й день [33] то
-        # нам надо добавить 2, например, 13 + 2, что бы в дату в итоге ввелось не 13 а 15е число
-        bday = int(bday)
-        if (bday >= 1) and (bday <= 31):
-            bday += 2
-        else:
-            bday = 2
+        self.byear = byear  # и a и b - вообще не трогаем изменение данных, может быть добавлю проверку на
+        self.ayear = ayear  # 4х значный формат если надо будет
 
+        # Убран пересчёт дней и месяцев, но оставлена проверка вводимых данных
+        bday = int(bday)
+        if bday < 1 or bday > 31:
+            bday = 0
+        else:
+            bday = bday
         self.bday = bday
+
+        aday = int(aday)
+        if aday < 1 or aday > 31:
+            aday = 0
+        else:
+            aday = aday
+        self.aday = aday
+
         # аналогично для месяца
         bmonth = int(bmonth)
+        blist = (
+            "January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
+            "November", "December")
         if (bmonth >= 1) and (bmonth <= 12):
-            bmonth += 1
+            i = bmonth - 1
+            bmonth = blist[i]
         else:
-            bmonth = 1
+            bmonth = "-"
         self.bmonth = bmonth
-        # год у нас просто поле
-        self.byear = byear
-        # так как локатор на "-" [2] а на 31й день [33] то, пустое поле хз, может 1
-        # нам надо добавить 2, например, 13 + 2, что бы в дату в итоге ввелось не 13 а 15е число
-        aday = int(aday)
-        if (aday >= 1) and (aday <= 31):
-            aday += 2
-        else:
-            aday = 2
-        self.aday = aday
-        # аналогично для месяца
+
         amonth = int(amonth)
+        alist = (
+            "January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
+            "November", "December")
         if (amonth >= 1) and (amonth <= 12):
-            amonth += 1
+            i = amonth - 1
+            amonth = alist[i]
         else:
-            amonth = 1
+            amonth = "-"
         self.amonth = amonth
-        # год у нас просто поле
-        self.ayear = ayear
 
 
 # class Date:
-#         # для перехода на эту версию - эту раскомментировать а версию выше закомментировать
+        # для перехода на эту версию - эту раскомментировать, а версию выше закомментировать
 #     def __init__(self, bday, bmonth, byear, aday, amonth, ayear):
-#         self.byear = byear   # и a и b - вообще не трогаем изменение данных, может быть добавлю проверку на
-#         self.ayear = ayear   # 4х значный формат если надо будет
-#
-#         # Убран пересчёт дней и месяцев, но оставлена проверка вводимых данных
+#         # так как локатор на пустое поле [2] а на 31й день [33] то
+#         # нам надо добавить 2, например, 13 + 2, что бы в дату в итоге ввелось не 13 а 15е число
 #         bday = int(bday)
 #         if (bday >= 1) and (bday <= 31):
-#             bday = bday
+#             bday += 2
 #         else:
 #             bday = 2
+#
 #         self.bday = bday
-#
-#         aday = int(aday)
-#         if (aday >= 1) and (aday <= 31):
-#             aday = aday
-#         else:
-#             aday = 2
-#         self.aday = aday
-#
 #         # аналогично для месяца
 #         bmonth = int(bmonth)
 #         if (bmonth >= 1) and (bmonth <= 12):
-#             bmonth = bmonth
+#             bmonth += 1
 #         else:
 #             bmonth = 1
 #         self.bmonth = bmonth
-#
+#         # год у нас просто поле
+#         self.byear = byear
+#         # так как локатор на "-" [2] а на 31й день [33] то, пустое поле хз, может 1
+#         # нам надо добавить 2, например, 13 + 2, что бы в дату в итоге ввелось не 13 а 15е число
+#         aday = int(aday)
+#         if (aday >= 1) and (aday <= 31):
+#             aday += 2
+#         else:
+#             aday = 2
+#         self.aday = aday
+#         # аналогично для месяца
 #         amonth = int(amonth)
 #         if (amonth >= 1) and (amonth <= 12):
-#             amonth = amonth
+#             amonth += 1
 #         else:
 #             amonth = 1
 #         self.amonth = amonth
+#         # год у нас просто поле
+#         self.ayear = ayear
+
+
+

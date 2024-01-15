@@ -82,31 +82,30 @@ class TestAddNewAddress(unittest.TestCase):
         wd.find_element_by_xpath("//input[@name='work']").clear()
         wd.find_element_by_xpath("//input[@name='work']").send_keys(phone.work_tel)
         # Born date settings
-
-        # # вариант 1 - по css, но надо убрать пересчёт даты
-        # bday_locator = f'select[name="bday"] > option[value="{date.bday}"]'
-        # wd.find_element_by_xpath("//select[@name='bday']").click()
-        # time.sleep(0.5)
-        # wd.find_element_by_css_selector(bday_locator).click()
-
-        # вариант 2 - по full_xpath, но для него надо пересчитывать дату(уже пересчитывается автоматически)
-        bday_locator = f'/html/body/div/div[4]/form/select[1]/option[{date.bday}]'
+        # вариант 1 - по css, без пересчёта даты
+        bday_locator = f'select[name="bday"] > option[value="{date.bday}"]'
         wd.find_element_by_xpath("//select[@name='bday']").click()
-        wd.find_element_by_xpath(bday_locator).click()
+        time.sleep(0.1)
+        wd.find_element_by_css_selector(bday_locator).click()
 
-        bmonth_locator = f'/html/body/div/div[4]/form/select[2]/option[{date.bmonth}]'
+        bmonth_locator = f'select[name="bmonth"] > option[value="{date.bmonth}"]'
         wd.find_element_by_xpath("//select[@name='bmonth']").click()
-        wd.find_element_by_xpath(bmonth_locator).click()
+        time.sleep(0.1)
+        wd.find_element_by_css_selector(bmonth_locator).click()
+
         wd.find_element_by_xpath("(//input[@name='byear'])[1]").click()
         wd.find_element_by_xpath("(//input[@name='byear'])[1]").clear()
         wd.find_element_by_xpath("(//input[@name='byear'])[1]").send_keys(date.byear)
+
         # Anniversary date setting
-        aday_locator = f'/html/body/div/div[4]/form/select[3]/option[{date.aday}]'
+        aday_locator = f'select[name="aday"] > option[value="{date.aday}"]'
         wd.find_element_by_xpath("//select[@name='aday']").click()
-        wd.find_element_by_xpath(aday_locator).click()
-        amonth_locator = f'/html/body/div/div[4]/form/select[4]/option[{date.amonth}]'
-        wd.find_element_by_xpath("//select[@name='amonth']").click()
-        wd.find_element_by_xpath(amonth_locator).click()
+        time.sleep(0.1)
+        wd.find_element_by_css_selector(aday_locator).click()
+        amonth_locator = f'select[name="amonth"] > option[value="{date.amonth}"]'
+        wd.find_element_by_xpath("//select[@name='bmonth']").click()
+        time.sleep(0.1)
+        wd.find_element_by_css_selector(amonth_locator).click()
         wd.find_element_by_xpath("(//input[@name='ayear'])[1]").click()
         wd.find_element_by_xpath("(//input[@name='ayear'])[1]").clear()
         wd.find_element_by_xpath("(//input[@name='ayear'])[1]").send_keys(date.ayear)
@@ -137,6 +136,7 @@ class TestAddNewAddress(unittest.TestCase):
         self.open_home_page(wd)
         self.login(wd, username="admin", password="secret")
         self.open_new_address_form(wd)
+        # Мессяц вводить числом от 1 до 12
         self.fill_address_form(wd,
                                Name(first_name="Константин",
                                     mid_name="Андреевич",
@@ -170,6 +170,7 @@ class TestAddNewAddress(unittest.TestCase):
         self.open_home_page(wd)
         self.login(wd, username="admin", password="secret")
         self.open_new_address_form(wd)
+        # Мессяц вводить числом от 1 до 12
         self.fill_address_form(wd,
                                Name(first_name="Валерий",
                                     mid_name="Непомню",
