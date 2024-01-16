@@ -148,8 +148,8 @@ class TestAddNewAddress(unittest.TestCase):
                                        email_2="email2@mail.ru",
                                        email_3="email3@mail.ru",
                                        homepage_url="https:\\www.homepage.com",
-                                       bday="32", bmonth="33", byear="1995",  # невалидный дд мм
-                                       aday="35", amonth="33", ayear="2022")  # невалидный дд мм
+                                       bday="32", bmonth="1", byear="1995",  # невалидный дд мм
+                                       aday="1", amonth="1", ayear="2022")  # невалидный дд мм
                                )
         self.press_top_enter_button(wd)
         self.add_next_address(wd)
