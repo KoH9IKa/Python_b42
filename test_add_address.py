@@ -97,7 +97,7 @@ class TestAddNewAddress(unittest.TestCase):
         wd.find_element_by_css_selector(aday_locator).click()
         # Anniversary month setting
         amonth_locator = f'select[name="amonth"] > option[value="{contact.amonth}"]'
-        wd.find_element_by_xpath("//select[@name='bmonth']").click()
+        wd.find_element_by_xpath("//select[@name='amonth']").click()
         wd.find_element_by_css_selector(amonth_locator).click()
         # Anniversary year setting
         wd.find_element_by_xpath("(//input[@name='ayear'])[1]").click()

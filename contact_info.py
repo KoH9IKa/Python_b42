@@ -19,48 +19,30 @@ class Contact:
         self.email_2 = email_2
         self.email_3 = email_3
         self.homepage_url = homepage_url
-        self.year(ayear, byear)
-        self.day(aday, bday)
-        self.month(amonth, bmonth)
-
-    def day(self, aday, bday):
-        # input check, if day == 1..31 then day = 1..31, else day = "-"
-        bday = int(bday)
-        if bday < 1 or bday > 31:
-            bday = 0
-        else:
-            bday = bday
-        self.bday = bday
-
-        aday = int(aday)
-        if aday < 1 or aday > 31:
-            aday = 0
-        else:
-            aday = aday
-        self.aday = aday
-
-    def month(self, amonth, bmonth):
-        # input check, if month == 1..12 then day = 1..12, else day = "-"
-        bmonth = int(bmonth)
-        montlist = (
-            "January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
-            "November", "December")
-        if bmonth < 1 or bmonth > 12:
-            bmonth = "-"
-        else:
-            i = bmonth - 1
-            bmonth = montlist[i]
-        self.bmonth = bmonth
-
-        amonth = int(amonth)
-        if amonth < 1 or amonth > 12:
-            amonth = "-"
-        else:
-            i = amonth - 1
-            amonth = montlist[i]
-        self.amonth = amonth
-
-    def year(self, ayear, byear):
-        # no check but if it will in future?
-        self.byear = byear
         self.ayear = ayear
+        self.byear = byear
+        self.aday = self.day(aday)
+        self.bday = self.day(bday)
+        self.amonth = self.month(amonth)
+        self.bmonth = self.month(bmonth)
+
+    def day(self, day):
+        # input check, if day == 1..31 then day = 1..31, else day = "-"
+        int_day = int(day)
+        if int_day < 1 or int_day > 31:
+            int_day = 0
+        else:
+            int_day = day
+        return int_day
+
+    def month(self, month):
+        # input check, if month == 1..12 then day = 1..12, else day = "-"
+        int_month = int(month)
+        montlist = ("January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December")
+        if int_month < 1 or int_month > 12:
+            int_month = "-"
+        else:
+            i = int_month - 1
+            int_month = montlist[i]
+        return int_month
