@@ -124,6 +124,70 @@ class TestAddNewAddress(unittest.TestCase):
         # bottom "enter" button usage
         wd.find_element_by_xpath("(//input[@name='submit'])[2]").click()
 
+    def test_add_address_invalid_bday(self):
+        # test with top "enter" button
+        wd = self.wd
+        self.open_home_page(wd)
+        self.login(wd, username="admin", password="secret")
+        self.open_new_address_form(wd)
+        # Месяц вводить цифрами от "1" до "12", День от "1" до "31"
+        self.fill_address_form(wd,
+                               Contact(first_name="Константин",
+                                       mid_name="Андреевич",
+                                       last_name="Верченко",
+                                       nick_name="Костян",
+                                       title="QA Eng.",
+                                       photo="",
+                                       company='ООО "Мартышка и очки"',
+                                       address="298300, г.Васюканск, ул.Из Костылей Строителей, д.404",
+                                       mob_tel="+7(123)456 78 90",
+                                       work_tel="+7(123)456 78 91",
+                                       home_tel="+7(123)456 78 92",
+                                       fax_tel="+7(123)456 78 93",
+                                       email="email1@mail.ru",
+                                       email_2="email2@mail.ru",
+                                       email_3="email3@mail.ru",
+                                       homepage_url="https:\\www.homepage.com",
+                                       bday="32", bmonth="1", byear="1995",  # невалидный день
+                                       aday="1", amonth="1", ayear="2022")
+                               )
+        self.press_top_enter_button(wd)
+        self.add_next_address(wd)
+        # check that next address link also is working and go to home page
+        self.return_to_home_page(wd)
+        # and logout
+        self.logout(wd)
+
+    def test_add_address_bot_but(self):
+        wd = self.wd
+        self.open_home_page(wd)
+        self.login(wd, username="admin", password="secret")
+        self.open_new_address_form(wd)
+        # Месяц вводить цифрами от "1" до "12", День от "1" до "31"
+        self.fill_address_form(wd,
+                               Contact(first_name="Валерий",
+                                       mid_name="Непомню",
+                                       last_name="Меладзе",
+                                       nick_name="Я_КРАСИВЫЙ",
+                                       title="сингер",
+                                       photo="",
+                                       company='ООО "Я Продюсер ВИА ГРЫ"',
+                                       address="7777777, г.Меладзовское, ул.Певцова, д.3",
+                                       mob_tel="+7(123)456 78 98",
+                                       work_tel="+7(123)456 78 99",
+                                       home_tel="+7(123)456 78 10",
+                                       fax_tel="+7(123)456 78 11",
+                                       email="email4@mail.ru",
+                                       email_2="email5@mail.ru",
+                                       email_3="email6@mail.ru",
+                                       homepage_url="https:\\www.homepage2.com",
+                                       bday="1", bmonth="12", byear="2023",  # валидный дд мм
+                                       aday="31", amonth="1", ayear="2003")  # валидный дд мм
+                               )
+        self.press_bottom_enter_button(wd)
+        self.return_to_home_page(wd)
+        self.logout(wd)
+
     def test_add_address_top_but(self):
         # test with top "enter" button
         wd = self.wd
@@ -148,45 +212,14 @@ class TestAddNewAddress(unittest.TestCase):
                                        email_2="email2@mail.ru",
                                        email_3="email3@mail.ru",
                                        homepage_url="https:\\www.homepage.com",
-                                       bday="32", bmonth="1", byear="1995",  # невалидный дд мм
-                                       aday="1", amonth="1", ayear="2022")  # невалидный дд мм
+                                       bday="31", bmonth="1", byear="1995",
+                                       aday="1", amonth="12", ayear="2022")
                                )
         self.press_top_enter_button(wd)
         self.add_next_address(wd)
         # check that next address link also is working and go to home page
         self.return_to_home_page(wd)
         # and logout
-        self.logout(wd)
-
-    def test_add_address_bot_but(self):
-        # test with bottom "enter" button
-        wd = self.wd
-        self.open_home_page(wd)
-        self.login(wd, username="admin", password="secret")
-        self.open_new_address_form(wd)
-        # Месяц вводить цифрами от "1" до "12", День от "1" до "31"
-        self.fill_address_form(wd,
-                               Contact(first_name="Валерий",
-                                       mid_name="Непомню",
-                                       last_name="Меладзе",
-                                       nick_name="Я_КРАСИВЫЙ",
-                                       title="сингер",
-                                       photo="",
-                                       company='ООО "Я Продюсер ВИА ГРЫ"',
-                                       address="7777777, г.Меладзовское, ул.Певцова, д.3",
-                                       mob_tel="+7(123)456 78 98",
-                                       work_tel="+7(123)456 78 99",
-                                       home_tel="+7(123)456 78 10",
-                                       fax_tel="+7(123)456 78 11",
-                                       email="email4@mail.ru",
-                                       email_2="email5@mail.ru",
-                                       email_3="email6@mail.ru",
-                                       homepage_url="https:\\www.homepage2.com",
-                                       bday="29", bmonth="1", byear="1993",  # валидный дд мм
-                                       aday="1", amonth="12", ayear="2023")  # валидный дд мм
-                               )
-        self.press_bottom_enter_button(wd)
-        self.return_to_home_page(wd)
         self.logout(wd)
 
     def tearDown(self):
