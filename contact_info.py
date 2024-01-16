@@ -1,6 +1,8 @@
 class Contact:
-    def __init__(self, first_name, mid_name, last_name, nick_name, photo, title, company, address,
-                 home_tel, mob_tel, work_tel, fax_tel, email, email_2, email_3, homepage_url):
+    def __init__(self, first_name, mid_name, last_name, nick_name,
+                 photo, title, company, address,
+                 home_tel, mob_tel, work_tel, fax_tel, email, email_2, email_3, homepage_url,
+                 bday, aday, bmonth, amonth, byear, ayear):
         self.first_name = first_name
         self.mid_name = mid_name
         self.last_name = last_name
@@ -17,27 +19,28 @@ class Contact:
         self.email_2 = email_2
         self.email_3 = email_3
         self.homepage_url = homepage_url
+        self.year(ayear, byear)
+        self.day(aday, bday)
+        self.month(amonth, bmonth)
 
-
-class Date:
-    def __init__(self, bday, bmonth, byear, aday, amonth, ayear):
-        self.byear = byear  # и a и b - вообще не трогаем изменение данных, может быть добавлю проверку на
-        self.ayear = ayear  # 4х значный формат если надо будет
-        # проверка вводимых данных, если не 1-31 то 0 (в селекторе будет выбран "-")
+    def day(self, aday, bday):
+        # input check, if day == 1..31 then day = 1..31, else day = "-"
         bday = int(bday)
         if bday < 1 or bday > 31:
             bday = 0
         else:
             bday = bday
         self.bday = bday
-        # то же самое для aday
+
         aday = int(aday)
         if aday < 1 or aday > 31:
             aday = 0
         else:
             aday = aday
         self.aday = aday
-        # аналогично для месяца + выбор по номеру месяца из теста = значение которое будет выбрано в селекторе
+
+    def month(self, amonth, bmonth):
+        # input check, if month == 1..12 then day = 1..12, else day = "-"
         bmonth = int(bmonth)
         montlist = (
             "January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
@@ -48,7 +51,7 @@ class Date:
             i = bmonth - 1
             bmonth = montlist[i]
         self.bmonth = bmonth
-        # то же самое для amonth
+
         amonth = int(amonth)
         if amonth < 1 or amonth > 12:
             amonth = "-"
@@ -56,3 +59,8 @@ class Date:
             i = amonth - 1
             amonth = montlist[i]
         self.amonth = amonth
+
+    def year(self, ayear, byear):
+        # no check but if it will in future?
+        self.byear = byear
+        self.ayear = ayear

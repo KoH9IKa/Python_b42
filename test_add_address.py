@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 from selenium import webdriver
 import unittest
-import keyboard
-import time
-from contact_info import Contact, Date
+from contact_info import Contact
 
 
 class TestAddNewAddress(unittest.TestCase):
@@ -27,7 +25,7 @@ class TestAddNewAddress(unittest.TestCase):
         # open "new address" page
         wd.find_element_by_link_text("add new").click()
 
-    def fill_address_form(self, wd, contact, date):
+    def fill_address_form(self, wd, contact):
         # fill name/midname/lastname/nickname
         wd.find_element_by_xpath("//input[@name='firstname']").click()
         wd.find_element_by_xpath("//input[@name='firstname']").clear()
@@ -82,29 +80,29 @@ class TestAddNewAddress(unittest.TestCase):
         wd.find_element_by_xpath("//input[@name='work']").clear()
         wd.find_element_by_xpath("//input[@name='work']").send_keys(contact.work_tel)
         # Born date setting
-        bday_locator = f'select[name="bday"] > option[value="{date.bday}"]'
+        bday_locator = f'select[name="bday"] > option[value="{contact.bday}"]'
         wd.find_element_by_xpath("//select[@name='bday']").click()
         wd.find_element_by_css_selector(bday_locator).click()
         # Born month setting
-        bmonth_locator = f'select[name="bmonth"] > option[value="{date.bmonth}"]'
+        bmonth_locator = f'select[name="bmonth"] > option[value="{contact.bmonth}"]'
         wd.find_element_by_xpath("//select[@name='bmonth']").click()
         wd.find_element_by_css_selector(bmonth_locator).click()
         # Born year setting
         wd.find_element_by_xpath("(//input[@name='byear'])[1]").click()
         wd.find_element_by_xpath("(//input[@name='byear'])[1]").clear()
-        wd.find_element_by_xpath("(//input[@name='byear'])[1]").send_keys(date.byear)
+        wd.find_element_by_xpath("(//input[@name='byear'])[1]").send_keys(contact.byear)
         # Anniversary date setting
-        aday_locator = f'select[name="aday"] > option[value="{date.aday}"]'
+        aday_locator = f'select[name="aday"] > option[value="{contact.aday}"]'
         wd.find_element_by_xpath("//select[@name='aday']").click()
         wd.find_element_by_css_selector(aday_locator).click()
         # Anniversary month setting
-        amonth_locator = f'select[name="amonth"] > option[value="{date.amonth}"]'
+        amonth_locator = f'select[name="amonth"] > option[value="{contact.amonth}"]'
         wd.find_element_by_xpath("//select[@name='bmonth']").click()
         wd.find_element_by_css_selector(amonth_locator).click()
         # Anniversary year setting
         wd.find_element_by_xpath("(//input[@name='ayear'])[1]").click()
         wd.find_element_by_xpath("(//input[@name='ayear'])[1]").clear()
-        wd.find_element_by_xpath("(//input[@name='ayear'])[1]").send_keys(date.ayear)
+        wd.find_element_by_xpath("(//input[@name='ayear'])[1]").send_keys(contact.ayear)
 
     def return_to_home_page(self, wd):
         # return to home page
@@ -132,7 +130,7 @@ class TestAddNewAddress(unittest.TestCase):
         self.open_home_page(wd)
         self.login(wd, username="admin", password="secret")
         self.open_new_address_form(wd)
-        # Мессяц вводить числом от 1 до 12
+        # Месяц вводить цифрами от "1" до "12", День от "1" до "31"
         self.fill_address_form(wd,
                                Contact(first_name="Константин",
                                        mid_name="Андреевич",
@@ -149,9 +147,9 @@ class TestAddNewAddress(unittest.TestCase):
                                        email="email1@mail.ru",
                                        email_2="email2@mail.ru",
                                        email_3="email3@mail.ru",
-                                       homepage_url="https:\\www.homepage.com"),
-                               Date(bday="32", bmonth="33", byear="1995",  # невалидный дд мм
-                                    aday="35", amonth="33", ayear="2022")  # невалидный дд мм
+                                       homepage_url="https:\\www.homepage.com",
+                                       bday="32", bmonth="33", byear="1995",  # невалидный дд мм
+                                       aday="35", amonth="33", ayear="2022")  # невалидный дд мм
                                )
         self.press_top_enter_button(wd)
         self.add_next_address(wd)
@@ -166,7 +164,7 @@ class TestAddNewAddress(unittest.TestCase):
         self.open_home_page(wd)
         self.login(wd, username="admin", password="secret")
         self.open_new_address_form(wd)
-        # Месяц вводить числом от 1 до 12
+        # Месяц вводить цифрами от "1" до "12", День от "1" до "31"
         self.fill_address_form(wd,
                                Contact(first_name="Валерий",
                                        mid_name="Непомню",
@@ -183,9 +181,9 @@ class TestAddNewAddress(unittest.TestCase):
                                        email="email4@mail.ru",
                                        email_2="email5@mail.ru",
                                        email_3="email6@mail.ru",
-                                       homepage_url="https:\\www.homepage2.com"),
-                               Date(bday="29", bmonth="1", byear="1993",  # валидный дд мм
-                                    aday="1", amonth="12", ayear="2023")  # валидный дд мм
+                                       homepage_url="https:\\www.homepage2.com",
+                                       bday="29", bmonth="1", byear="1993",  # валидный дд мм
+                                       aday="1", amonth="12", ayear="2023")  # валидный дд мм
                                )
         self.press_bottom_enter_button(wd)
         self.return_to_home_page(wd)
