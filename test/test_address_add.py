@@ -6,26 +6,26 @@ def test_add_address_bot_but(app):
     # positive test with bottom enter button
     app.session.login(username="admin", password="secret")
     app.address.add_new_address()
-    # Месяц вводить цифрами от "1" до "12", День от "1" до "31"
-    app.address.create(Contact(first_name="Валерий",
-                               mid_name="Непомню",
-                               last_name="Меладзе",
-                               nick_name="Я_КРАСИВЫЙ",
-                               title="сингер",
-                               photo="",
-                               company='ООО "Я Продюсер ВИА ГРЫ"',
-                               address="7777777, г.Меладзовское, ул.Певцова, д.3",
-                               mob_tel="+7(123)456 78 98",
-                               work_tel="+7(123)456 78 99",
-                               home_tel="+7(123)456 78 10",
-                               fax_tel="+7(123)456 78 11",
-                               email="email4@mail.ru",
-                               email2="email5@mail.ru",
-                               email3="email6@mail.ru",
-                               homepage_url="https:\\www.homepage2.com",
-                               bday="1", bmonth="12", byear="2023",  # валидный дд мм
-                               aday="31", amonth="1", ayear="2003")  # валидный дд мм
-                       )
+    # Месяц вводить цифрами от "1" до "12", День от "1" до "31", форма может принимать None
+    app.address.edit_or_create_with_check(Contact(first_name="Валерий",
+                                                  mid_name="Непомню",
+                                                  last_name="Меладзе",
+                                                  nick_name="Я_КРАСИВЫЙ",
+                                                  title="сингер",
+                                                  photo="",
+                                                  company='ООО "Я Продюсер ВИА ГРЫ"',
+                                                  address="7777777, г.Меладзовское, ул.Певцова, д.3",
+                                                  mob_tel="+7(123)456 78 98",
+                                                  work_tel="+7(123)456 78 99",
+                                                  home_tel="+7(123)456 78 10",
+                                                  fax_tel="+7(123)456 78 11",
+                                                  email="email4@mail.ru",
+                                                  email2="email5@mail.ru",
+                                                  email3="email6@mail.ru",
+                                                  homepage_url="https:\\www.homepage2.com",
+                                                  bday="1", bmonth="12", byear="2023",  # валидный дд мм
+                                                  aday="31", amonth="1", ayear="2003")  # валидный дд мм
+                                          )
     app.address.press_bottom_enter_button()
     app.return_to_home_page()
     app.session.logout()
@@ -35,7 +35,7 @@ def test_add_address_top_but(app):
     # positive test with top enter button + link for add next address
     app.session.login(username="admin", password="secret")
     app.address.add_new_address()
-    # Месяц вводить цифрами от "1" до "12", День от "1" до "31"
+    # Месяц вводить цифрами от "1" до "12", День от "1" до "31", форма может принимать None
     app.address.edit_or_create_with_check(Contact(first_name="Константин",
                                                   mid_name="Андреевич",
                                                   last_name="Верченко",

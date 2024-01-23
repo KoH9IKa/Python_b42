@@ -18,7 +18,7 @@ class SessionHelper:
 
     def logout(self):
         wd = self.app.wd
-        # logout
+        time.sleep(1)  # этот нужен, что бы предыдущая страница успела прогрузиться
         wd.find_element_by_link_text("Logout").click()
-        time.sleep(1)
+        time.sleep(1)  # а этот что бы разлогин успел произойти перед следующим тестом
 
