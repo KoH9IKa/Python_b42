@@ -1,8 +1,9 @@
 class Contact:
-    def __init__(self, first_name, mid_name, last_name, nick_name,
-                 photo, title, company, address,
-                 home_tel, mob_tel, work_tel, fax_tel, email, email2, email3, homepage_url,
-                 bday, aday, bmonth, amonth, byear, ayear):
+    def __init__(self, first_name=None, mid_name=None, last_name=None, nick_name=None,
+                 photo=None, title=None, company=None, address=None,
+                 home_tel=None, mob_tel=None, work_tel=None, fax_tel=None,
+                 email=None, email2=None, email3=None, homepage_url=None,
+                 bday=None, aday=None, bmonth=None, amonth=None, byear=None, ayear=None):
         self.first_name = first_name
         self.mid_name = mid_name
         self.last_name = last_name
@@ -23,8 +24,6 @@ class Contact:
         self.byear = byear
         self.aday = aday
         self.bday = bday
-        # self.aday = self.day(aday)
-        # self.bday = self.day(bday)
         self.amonth = self.month_calc(amonth)
         self.bmonth = self.month_calc(bmonth)
 

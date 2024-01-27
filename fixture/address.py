@@ -105,7 +105,6 @@ class AddressHelper:
             wd.find_element_by_xpath(locator).send_keys(param)
         else:  # Можно убрать елсе блок. Оставил что бы смотреть за шагами
             wd.find_element_by_xpath(locator).click()
-        return
 
     def day_and_month_selector_check(self, param, select, locator):
         wd = self.app.wd
@@ -114,4 +113,3 @@ class AddressHelper:
             wd.find_element_by_css_selector(locator).click()
         else:  # Можно убрать елсе блок. Оставил что бы смотреть за шагами
             wd.find_element_by_xpath(select).click()
-        return

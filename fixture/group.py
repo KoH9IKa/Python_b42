@@ -16,6 +16,10 @@ class GroupHelper:
         wd = self.app.wd
         wd.find_element_by_name("submit").click()
 
+    def submit_update(self):
+        wd = self.app.wd
+        wd.find_element_by_name("update").click()
+
     def return_to_groups_page(self):
         wd = self.app.wd
         wd.find_element_by_link_text("group page").click()
@@ -47,6 +51,5 @@ class GroupHelper:
             wd.find_element_by_name(locator).click()
             wd.find_element_by_name(locator).clear()
             wd.find_element_by_name(locator).send_keys(param)
-        else:
+        else:  # Можно убрать елсе блок. Оставил что бы смотреть за шагами
             wd.find_element_by_name(locator).click()
-        return

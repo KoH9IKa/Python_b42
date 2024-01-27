@@ -4,7 +4,6 @@ from model.contact_info import Contact
 
 def test_add_address_bot_but(app):
     # positive test with bottom enter button
-    app.session.login(username="admin", password="secret")
     app.address.add_new_address()
     # Месяц вводить цифрами от "1" до "12", День от "1" до "31", форма может принимать None
     app.address.edit_or_create_with_check(Contact(first_name="Валерий",
@@ -28,12 +27,10 @@ def test_add_address_bot_but(app):
                                           )
     app.address.press_bottom_enter_button()
     app.return_to_home_page()
-    app.session.logout()
 
 
 def test_add_address_top_but(app):
     # positive test with top enter button + link for add next address
-    app.session.login(username="admin", password="secret")
     app.address.add_new_address()
     # Месяц вводить цифрами от "1" до "12", День от "1" до "31", форма может принимать None
     app.address.edit_or_create_with_check(Contact(first_name="Константин",
@@ -59,4 +56,3 @@ def test_add_address_top_but(app):
     # check that next address link also is working and go to home page
     app.address.add_next_address()
     app.return_to_home_page()
-    app.session.logout()

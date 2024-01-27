@@ -1,11 +1,25 @@
 import pytest
 from fixture.application import Application
 
+fixture = None
 
-@pytest.fixture(scope="session")
-# лежит тут и полностью дублирует файл из папки test на случай если надо запустить не всю папку, а конкретную страницу
-# при изменении любого из - изменить оба
+
+@pytest.fixture
 def app(request):
-    fixture = Application()
-    request.addfinalizer(fixture.destroy)
+    global fixture
+    if fixture is None:
+        fixture = Application()
+    else:
+        if not fixture.is_valid():
+            fixture = Application()
+    fixture.session.ensure_login(username="admin", password="secret")
+    return fixture
+
+
+@pytest.fixture(scope="session", autouse=True)
+def stop(request):
+    def fin():
+        fixture.session.ensure_logout()
+        fixture.destroy()
+    request.addfinalizer(fin)
     return fixture
