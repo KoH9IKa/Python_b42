@@ -1,26 +1,40 @@
+import time
+
+from model.contact_info import Contact
+
 
 class AddressHelper:
 
     def __init__(self, app):
         self.app = app
 
-    def add_next_address(self):
+    def open_address_page(self):
         wd = self.app.wd
+        # open groups page with check
+        if not wd.current_url.endswith("addressbook/"):
+            wd.find_element_by_link_text("home").click()
+        else:
+            pass  # если уже на нужной странице - пропускаем шаг
+
+    def add_next_address(self):  # проверка на страницу не нужна так как попасть на страницу где кнопка -
+        wd = self.app.wd         # можно только через создание группы
         # return to form for add next address
         wd.find_element_by_xpath("//a[normalize-space()='add next']").click()
 
     def add_new_address(self):
         wd = self.app.wd
+        if not wd.current_url.endswith("/edit.php"):
+            self.open_address_page()
         wd.find_element_by_link_text("add new").click()
 
     def press_top_enter_button(self):
         wd = self.app.wd
-        # top "enter" button usage
+        # top "enter" button
         wd.find_element_by_xpath("(//input[@name='submit'])[1]").click()
 
     def press_bottom_enter_button(self):
         wd = self.app.wd
-        # bottom "enter" button usage
+        # bottom "enter" button
         wd.find_element_by_xpath("(//input[@name='submit'])[2]").click()
 
     def sort_by_last_name(self):
@@ -30,6 +44,7 @@ class AddressHelper:
 
     def delete_first_address(self):
         wd = self.app.wd
+        self.open_address_page()
         wd.find_element_by_name("selected[]").click()
         wd.find_element_by_xpath("//input[@value='Delete']").click()
 
@@ -39,13 +54,21 @@ class AddressHelper:
 
     def press_top_update_button(self):
         wd = self.app.wd
-        wd.find_element_by_xpath("(//input[@name='update'])[1]")
+        wd.find_element_by_xpath("(//input[@name='update'])[1]").click()
 
     def press_bot_update_button(self):
         wd = self.app.wd
-        wd.find_element_by_xpath("(//input[@name='update'])[2]")
+        wd.find_element_by_xpath("(//input[@name='update'])[2]").click()
 
-    def edit_or_create_with_check(self, contact):
+    def select_all_checkbox(self):
+        wd = self.app.wd
+        wd.find_element_by_xpath('//*[@id="MassCB"]').click()
+
+    def delete_button_in_table(self):
+        wd = self.app.wd
+        wd.find_element_by_xpath("//input[@value='Delete']").click()
+
+    def fill_form_with_check(self, contact):
         # Идёт в комплекте с (input_check_with_xpath + day_and_month_selector_check). Там где данные не трогаем -
         # ставим None, если стоит None то поле только кликается, что бы успеть видеть на каком поле находится тест
         locator_first_name = "//input[@name='firstname']"
@@ -63,7 +86,7 @@ class AddressHelper:
         locator_email2 = "//input[@name='email2']"
         locator_email3 = "//input[@name='email3']"
         locator_homepage_url = "//input[@name='homepage']"
-        locator_bday_selector = "//select[@name='bday']"                        # то где! выбираем
+        locator_bday_selector = "//select[@name='bday']"  # то где! выбираем
         bday_locator = f'select[name="bday"] > option[value="{contact.bday}"]'  # то что! выбираем
         locator_bmonth_selector = "//select[@name='bmonth']"
         bmonth_locator = f'select[name="bmonth"] > option[value="{contact.bmonth}"]'
@@ -113,3 +136,46 @@ class AddressHelper:
             wd.find_element_by_css_selector(locator).click()
         else:  # Можно убрать елсе блок. Оставил что бы смотреть за шагами
             wd.find_element_by_xpath(select).click()
+
+    def count(self):
+        wd = self.app.wd
+        self.open_address_page()
+        return len(wd.find_elements_by_name("selected[]"))
+
+    def add_default_empty_address(self, amount):
+        if self.count() < amount:
+            count = self.count()
+            while count < amount:  # создаём пока не достигнем нужного числа
+                count += 1
+                self.add_new_address()
+                self.fill_form_with_check(Contact())
+                self.press_top_enter_button()
+                self.open_address_page()
+
+    def add_default_filled_address(self, amount):  # в amount передаём кол-во записей которые нам нужны
+        if self.count() < amount:
+            count = self.count()
+            while count < amount:      # создаём пока не достигнем нужного числа
+                count += 1
+                text = str(count) + ' Это порядковый номер'
+                self.add_new_address()
+                self.fill_form_with_check(Contact(first_name=text,  # пока что для отслеживания - отправляем номер
+                                                  mid_name="Тестовый",
+                                                  last_name="Адрес",
+                                                  nick_name="Который",
+                                                  title="Имеет",
+                                                  photo="",
+                                                  company='ОООООООЧень обычные',
+                                                  address="7777777, строки с данными",
+                                                  mob_tel="+7(123)456 78 98",
+                                                  work_tel="+7(123)456 78 99",
+                                                  home_tel="+7(123)456 78 10",
+                                                  fax_tel="+7(123)456 78 11",
+                                                  email="test@mail.ru",
+                                                  email2="test2@mail.ru",
+                                                  email3="test3@mail.ru",
+                                                  homepage_url="https:\\www.homepage2.com",
+                                                  bday="5", bmonth="5", byear="2023",  # валидный дд мм
+                                                  aday="5", amonth="5", ayear="2003"))  # валидный дд мм
+                self.press_top_enter_button()
+                self.open_address_page()
