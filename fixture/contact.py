@@ -31,11 +31,13 @@ class ContactHelper:
         wd = self.app.wd
         # top "enter" button
         wd.find_element_by_xpath("(//input[@name='submit'])[1]").click()
+        self.contact_cache = None
 
     def press_bottom_enter_button(self):
         wd = self.app.wd
         # bottom "enter" button
         wd.find_element_by_xpath("(//input[@name='submit'])[2]").click()
+        self.contact_cache = None
 
     def sort_by_last_name(self):
         wd = self.app.wd
@@ -47,18 +49,22 @@ class ContactHelper:
         self.open_contacts_page()
         wd.find_element_by_name("selected[]").click()
         wd.find_element_by_xpath("//input[@value='Delete']").click()
+        self.contact_cache = None
 
     def edit_first_contact_in_table(self):
         wd = self.app.wd
         wd.find_element_by_xpath("(//img[@title='Edit'])[1]").click()
+        self.contact_cache = None
 
     def press_top_update_button(self):
         wd = self.app.wd
         wd.find_element_by_xpath("(//input[@name='update'])[1]").click()
+        self.contact_cache = None
 
     def press_bot_update_button(self):
         wd = self.app.wd
         wd.find_element_by_xpath("(//input[@name='update'])[2]").click()
+        self.contact_cache = None
 
     def select_all_checkbox(self):
         wd = self.app.wd
@@ -67,6 +73,7 @@ class ContactHelper:
     def delete_button_in_table(self):
         wd = self.app.wd
         wd.find_element_by_xpath("//input[@value='Delete']").click()
+        self.contact_cache = None
 
     def fill_form_with_check(self, contact):
         # Идёт в комплекте с (input_check_with_xpath + day_and_month_selector_check). Там где данные не трогаем -
@@ -150,6 +157,7 @@ class ContactHelper:
                 self.add_new_contact()
                 self.fill_form_with_check(Contact())
                 self.press_top_enter_button()
+                self.contact_cache = None
                 self.open_contacts_page()
 
     def add_default_filled_contact(self, amount):  # в amount передаём кол-во записей которые нам нужны
@@ -179,14 +187,18 @@ class ContactHelper:
                                                   bday="5", bmonth="5", byear="2023",  # валидный дд мм
                                                   aday="5", amonth="5", ayear="2003"))  # валидный дд мм
                 self.press_top_enter_button()
+                self.contact_cache = None
                 self.open_contacts_page()
 
+    contact_cache = None
+
     def get_contact_list(self):
-        wd = self.app.wd
-        contact_list = []
-        for elem in wd.find_elements_by_xpath('//*[@id="maintable"]//tbody//tr[@name="entry"]'):
-            id = elem.find_element_by_xpath('.//td[1]//input').get_attribute("value")
-            last_name = elem.find_element_by_xpath('.//td[2]').text
-            first_name = elem.find_element_by_xpath('.//td[3]').text
-            contact_list.append(Contact(id=id, last_name=last_name, first_name=first_name))
-        return contact_list
+        if self.contact_cache is None:
+            wd = self.app.wd
+            self.contact_cache = []
+            for elem in wd.find_elements_by_xpath('//*[@id="maintable"]//tbody//tr[@name="entry"]'):
+                id = elem.find_element_by_xpath('.//td[1]//input').get_attribute("value")
+                last_name = elem.find_element_by_xpath('.//td[2]').text
+                first_name = elem.find_element_by_xpath('.//td[3]').text
+                self.contact_cache.append(Contact(id=id, last_name=last_name, first_name=first_name))
+        return list(self.contact_cache)

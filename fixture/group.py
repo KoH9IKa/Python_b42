@@ -24,16 +24,22 @@ class GroupHelper:
     def submit(self):
         wd = self.app.wd
         wd.find_element_by_name("submit").click()
+        self.group_cache = None
+        # self.creating_complete_message()
 
     def submit_update(self):
         wd = self.app.wd
         wd.find_element_by_name("update").click()
+        self.group_cache = None
+        # self.editing_complete_message()
 
     def delete_first_group(self):
         wd = self.app.wd
         self.open_groups_page()
         wd.find_element_by_name("selected[]").click()
         wd.find_element_by_xpath("(//input[@name='delete'])[1]").click()
+        self.group_cache = None
+        # self.deletion_complete_message()
 
     def edit_first_group_in_table(self):
         wd = self.app.wd
@@ -74,8 +80,11 @@ class GroupHelper:
         text = "A new group has been entered into the address book.\nreturn to the group page"
         locator = wd.find_element_by_xpath('//*[@id="content"]/div').text
         if locator == text:
+            self.group_cache = None
+            print("Группа создана, текст ОК!")
             return True
         else:
+            self.group_cache = None
             print("В тексте сообщения об успешном создании группы - ошибка")
             return False
 
@@ -84,6 +93,7 @@ class GroupHelper:
         text = "Group record has been updated.\nreturn to the group page"
         locator = wd.find_element_by_xpath('//*[@id="content"]/div').text
         if locator == text:
+            print("Группа изменена, текст ОК!")
             return True
         else:
             print("В тексте сообщения об успешном изменении группы - ошибка")
@@ -94,8 +104,11 @@ class GroupHelper:
         text = "Group has been removed.\nreturn to the group page"
         locator = wd.find_element_by_xpath('//*[@id="content"]/div').text
         if locator == text:
+            self.group_cache = None
+            print("Группа удалена, текст ОК!")
             return True
         else:
+            self.group_cache = None
             print("В тексте сообщения об успешном удалении группы - ошибка")
             return False
 
@@ -124,12 +137,16 @@ class GroupHelper:
                 self.submit()
                 self.open_groups_page()
 
+    group_cache = None
+
     def get_group_list(self):
-        wd = self.app.wd
-        groups_list = []
-        for element in wd.find_elements_by_css_selector("span.group"):
-            text = element.text
-            id = element.find_element_by_name("selected[]").get_attribute("value")
-            groups_list.append(Group(name=text, id=id))
-        return groups_list
+        if self.group_cache is None:
+            wd = self.app.wd
+            self.group_cache = []
+            for element in wd.find_elements_by_css_selector("span.group"):
+                text = element.text
+                id = element.find_element_by_name("selected[]").get_attribute("value")
+                self.group_cache.append(Group(name=text, id=id))
+        return list(self.group_cache)
+
 
