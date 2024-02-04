@@ -41,10 +41,22 @@ class GroupHelper:
         self.group_cache = None
         # self.deletion_complete_message()
 
-    def edit_first_group_in_table(self):
+    def delete_group_by_index(self, index):
         wd = self.app.wd
         self.open_groups_page()
-        wd.find_element_by_name("selected[]").click()
+        self.select_group_by_index(index)
+        wd.find_element_by_xpath("(//input[@name='delete'])[1]").click()
+        self.group_cache = None
+        # self.deletion_complete_message()
+
+    def select_group_by_index(self, index):
+        wd = self.app.wd
+        wd.find_elements_by_name("selected[]")[index].click()
+
+    def edit_group_by_index(self, index):
+        wd = self.app.wd
+        self.open_groups_page()
+        self.select_group_by_index(index)
         wd.find_element_by_xpath("(//input[@name='edit'])[1]").click()
 
     def fill_form_with_check(self, group):

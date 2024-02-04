@@ -51,10 +51,30 @@ class ContactHelper:
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         self.contact_cache = None
 
-    def edit_first_contact_in_table(self):
+    def delete_contact_by_index(self, index):
         wd = self.app.wd
-        wd.find_element_by_xpath("(//img[@title='Edit'])[1]").click()
+        self.open_contacts_page()
+        self.select_checkbox_by_index(index)
+        wd.find_element_by_xpath("//input[@value='Delete']").click()
         self.contact_cache = None
+
+    def select_checkbox_by_index(self, index):
+        wd = self.app.wd
+        # time.sleep(1)
+        # wd.find_elements_by_name("selected[]")[index].click()  # работает, но я ему не доверяю
+
+        # еще 1 вариант рабочий
+        index += 2
+        locator = f'//tr[{index}]//td[1]//input[@type="checkbox"]'
+        wd.find_element_by_xpath(locator).click()
+        # time.sleep(2)
+
+    def edit_contact_by_index(self, index):
+        wd = self.app.wd
+        index += 2
+        # time.sleep(1)
+        locator = f'//tr[{index}]//td[8]//a//img'
+        wd.find_element_by_xpath(locator).click()
 
     def press_top_update_button(self):
         wd = self.app.wd
