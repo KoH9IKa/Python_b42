@@ -15,8 +15,8 @@ def test_update_last_by_lastname_address(app):
     app.contact.fill_form_with_check(contact)
     app.contact.press_top_update_button()
     app.open_home_page()
+    assert len(old_contact) == app.contact.count()
     new_contact = app.contact.get_contact_list()
-    assert len(new_contact) == len(old_contact)
     contact.id = old_contact[0].id
     old_contact[0] = contact
     # noinspection PyTypeChecker

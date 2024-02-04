@@ -13,8 +13,8 @@ def test_update_first_group(app):
     app.group.fill_form_with_check(group)
     app.group.submit_update()
     app.group.open_groups_page()
+    assert len(old_groups) == app.group.count()
     new_groups = app.group.get_group_list()
-    assert len(old_groups) == len(new_groups)
     old_groups[0] = group
     # noinspection PyTypeChecker
     assert sorted(old_groups, key=Group.id_or_max) == sorted(new_groups, key=Group.id_or_max)
