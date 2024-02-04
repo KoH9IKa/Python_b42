@@ -123,3 +123,13 @@ class GroupHelper:
                 self.fill_form_with_check(Group(name=text, header="Какой-то хедер", footer="Какой-то футер"))
                 self.submit()
                 self.open_groups_page()
+
+    def get_group_list(self):
+        wd = self.app.wd
+        groups_list = []
+        for element in wd.find_elements_by_css_selector("span.group"):
+            text = element.text
+            id = element.find_element_by_name("selected[]").get_attribute("value")
+            groups_list.append(Group(name=text, id=id))
+        return groups_list
+

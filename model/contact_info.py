@@ -1,9 +1,12 @@
+from sys import maxsize
+
+
 class Contact:
     def __init__(self, first_name=None, mid_name=None, last_name=None, nick_name=None,
                  photo=None, title=None, company=None, address=None,
                  home_tel=None, mob_tel=None, work_tel=None, fax_tel=None,
                  email=None, email2=None, email3=None, homepage_url=None,
-                 bday=None, aday=None, bmonth=None, amonth=None, byear=None, ayear=None):
+                 bday=None, aday=None, bmonth=None, amonth=None, byear=None, ayear=None, id=None):
         self.first_name = first_name
         self.mid_name = mid_name
         self.last_name = last_name
@@ -26,18 +29,31 @@ class Contact:
         self.bday = bday
         self.amonth = self.month_calc(amonth)
         self.bmonth = self.month_calc(bmonth)
+        self.id = id
+
+    def __repr__(self):
+        # return "%s:%s:%s" % (self.id, self.last_name, self.first_name)
+        return f'{self.id}:{self.last_name}:{self.first_name}'
+
+    def __eq__(self, other):
+        return ((self.id is None or other.id is None or self.id == other.id) and self.last_name == other.last_name
+                and self.first_name == other.first_name)
+
+    def id_or_max(self):
+        if self.id:
+            return int(self.id)
+        else:
+            return maxsize
 
     def month_calc(self, month):
-        # input check, if month == 1..12 then day = 1..12, else day = "-"
         try:
-            if month is not None:  # так как в месяц может прилететь None и тест упадёт
-                int_month = int(month)
-                montlist = ("January", "February", "March", "April", "May", "June",
-                            "July", "August", "September", "October", "November", "December")
-                i = int_month - 1
-                int_month = montlist[i]
+            if month is not None:
+                month_list = ["January", "February", "March", "April", "May", "June",
+                              "July", "August", "September", "October", "November", "December"]
+                i = int(month) - 1
+                month_name = month_list[i]
             else:
-                int_month = None
+                month_name = None
         except:
-            int_month = ""
-        return int_month
+            month_name = ""
+        return month_name

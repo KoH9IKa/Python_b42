@@ -3,12 +3,12 @@ import time
 from model.contact_info import Contact
 
 
-class AddressHelper:
+class ContactHelper:
 
     def __init__(self, app):
         self.app = app
 
-    def open_address_page(self):
+    def open_contacts_page(self):
         wd = self.app.wd
         # open groups page with check
         if not wd.current_url.endswith("addressbook/"):
@@ -16,15 +16,15 @@ class AddressHelper:
         else:
             pass  # если уже на нужной странице - пропускаем шаг
 
-    def add_next_address(self):  # проверка на страницу не нужна так как попасть на страницу где кнопка -
-        wd = self.app.wd         # можно только через создание группы
+    def add_next_contact(self):  # проверка на страницу не нужна так как попасть на страницу, где кнопка -
+        wd = self.app.wd  # можно только через создание группы
         # return to form for add next address
         wd.find_element_by_xpath("//a[normalize-space()='add next']").click()
 
-    def add_new_address(self):
+    def add_new_contact(self):
         wd = self.app.wd
         if not wd.current_url.endswith("/edit.php"):
-            self.open_address_page()
+            self.open_contacts_page()
         wd.find_element_by_link_text("add new").click()
 
     def press_top_enter_button(self):
@@ -42,13 +42,13 @@ class AddressHelper:
         # call once to asc, call twice to desc
         wd.find_element_by_xpath("//a[@title='Sort on “Last name”']").click()
 
-    def delete_first_address(self):
+    def delete_first_contact(self):
         wd = self.app.wd
-        self.open_address_page()
+        self.open_contacts_page()
         wd.find_element_by_name("selected[]").click()
         wd.find_element_by_xpath("//input[@value='Delete']").click()
 
-    def edit_first_address_in_table(self):
+    def edit_first_contact_in_table(self):
         wd = self.app.wd
         wd.find_element_by_xpath("(//img[@title='Edit'])[1]").click()
 
@@ -139,29 +139,30 @@ class AddressHelper:
 
     def count(self):
         wd = self.app.wd
-        self.open_address_page()
+        self.open_contacts_page()
         return len(wd.find_elements_by_name("selected[]"))
 
-    def add_default_empty_address(self, amount):
+    def add_default_empty_contact(self, amount):
         if self.count() < amount:
             count = self.count()
             while count < amount:  # создаём пока не достигнем нужного числа
                 count += 1
-                self.add_new_address()
+                self.add_new_contact()
                 self.fill_form_with_check(Contact())
                 self.press_top_enter_button()
-                self.open_address_page()
+                self.open_contacts_page()
 
-    def add_default_filled_address(self, amount):  # в amount передаём кол-во записей которые нам нужны
+    def add_default_filled_contact(self, amount):  # в amount передаём кол-во записей которые нам нужны
         if self.count() < amount:
             count = self.count()
-            while count < amount:      # создаём пока не достигнем нужного числа
+            while count < amount:  # создаём пока не достигнем нужного числа
                 count += 1
-                text = str(count) + ' Это порядковый номер'
-                self.add_new_address()
+                # text = f'{count} - это порядковый номер'
+                text = f'{count} Фамилия'
+                self.add_new_contact()
                 self.fill_form_with_check(Contact(first_name=text,  # пока что для отслеживания - отправляем номер
                                                   mid_name="Тестовый",
-                                                  last_name="Адрес",
+                                                  last_name="Имя",
                                                   nick_name="Который",
                                                   title="Имеет",
                                                   photo="",
@@ -178,4 +179,14 @@ class AddressHelper:
                                                   bday="5", bmonth="5", byear="2023",  # валидный дд мм
                                                   aday="5", amonth="5", ayear="2003"))  # валидный дд мм
                 self.press_top_enter_button()
-                self.open_address_page()
+                self.open_contacts_page()
+
+    def get_contact_list(self):
+        wd = self.app.wd
+        contact_list = []
+        for elem in wd.find_elements_by_xpath('//*[@id="maintable"]//tbody//tr[@name="entry"]'):
+            id = elem.find_element_by_xpath('.//td[1]//input').get_attribute("value")
+            last_name = elem.find_element_by_xpath('.//td[2]').text
+            first_name = elem.find_element_by_xpath('.//td[3]').text
+            contact_list.append(Contact(id=id, last_name=last_name, first_name=first_name))
+        return contact_list
