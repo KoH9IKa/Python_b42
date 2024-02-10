@@ -1,11 +1,17 @@
 import time
 from model.group_info import Group
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 
 
 class GroupHelper:
 
     def __init__(self, app):
         self.app = app
+        self.group_cache = None
+        wd = self.app.wd
+        self.wait = WebDriverWait(wd, 5, poll_frequency=0.1)
 
     def open_groups_page(self):
         wd = self.app.wd
@@ -19,6 +25,8 @@ class GroupHelper:
         wd = self.app.wd
         if not (wd.current_url.endswith("/group.php") and len(wd.find_elements_by_name("new")) > 0):
             wd.find_element_by_link_text("groups").click()
+        what_to_wait = wd.find_element(By.XPATH, "(//input[@name='edit'])[1]")
+        self.wait.until(EC.visibility_of(what_to_wait))
         wd.find_element_by_name("new").click()
 
     def submit(self):
@@ -149,16 +157,15 @@ class GroupHelper:
                 self.submit()
                 self.open_groups_page()
 
-    group_cache = None
-
     def get_group_list(self):
         if self.group_cache is None:
             wd = self.app.wd
+            self.open_groups_page()
             self.group_cache = []
             for element in wd.find_elements_by_css_selector("span.group"):
                 text = element.text
                 id = element.find_element_by_name("selected[]").get_attribute("value")
                 self.group_cache.append(Group(name=text, id=id))
-        return list(self.group_cache)
+        return self.group_cache
 
 

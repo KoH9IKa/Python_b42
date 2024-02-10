@@ -53,7 +53,7 @@ def test_add_contact_top_but(app):
     assert sorted(old_contact, key=Contact.id_or_max) == sorted(new_contact, key=Contact.id_or_max)
 
 
-def test_add_some_contact(app):  #  используем если надо сразу штук (много) групп сделать
+def test_add_some_contact(app):  # используем если надо сразу несколько групп сделать указывая amount
     app.contact.add_new_contact()
     amount = 20
     if app.contact.count() < amount:

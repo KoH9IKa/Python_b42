@@ -1,5 +1,5 @@
 import time
-
+import re
 from model.contact_info import Contact
 
 
@@ -7,6 +7,8 @@ class ContactHelper:
 
     def __init__(self, app):
         self.app = app
+        self.contact_cache = None
+        # contact_cache = None
 
     def open_contacts_page(self):
         wd = self.app.wd
@@ -60,20 +62,22 @@ class ContactHelper:
 
     def select_checkbox_by_index(self, index):
         wd = self.app.wd
-        # time.sleep(1)
         # wd.find_elements_by_name("selected[]")[index].click()  # работает, но я ему не доверяю
-
         # еще 1 вариант рабочий
         index += 2
         locator = f'//tr[{index}]//td[1]//input[@type="checkbox"]'
         wd.find_element_by_xpath(locator).click()
-        # time.sleep(2)
 
     def edit_contact_by_index(self, index):
         wd = self.app.wd
         index += 2
-        # time.sleep(1)
         locator = f'//tr[{index}]//td[8]//a//img'
+        wd.find_element_by_xpath(locator).click()
+
+    def open_contact_view_by_index(self, index):
+        wd = self.app.wd
+        index += 2
+        locator = f'//tr[{index}]//td[7]//a//img'
         wd.find_element_by_xpath(locator).click()
 
     def press_top_update_button(self):
@@ -210,15 +214,67 @@ class ContactHelper:
                 self.contact_cache = None
                 self.open_contacts_page()
 
-    contact_cache = None
-
     def get_contact_list(self):
         if self.contact_cache is None:
             wd = self.app.wd
+            self.open_contacts_page()
             self.contact_cache = []
             for elem in wd.find_elements_by_xpath('//*[@id="maintable"]//tbody//tr[@name="entry"]'):
                 id = elem.find_element_by_xpath('.//td[1]//input').get_attribute("value")
                 last_name = elem.find_element_by_xpath('.//td[2]').text
                 first_name = elem.find_element_by_xpath('.//td[3]').text
-                self.contact_cache.append(Contact(id=id, last_name=last_name, first_name=first_name))
-        return list(self.contact_cache)
+                address = elem.find_element_by_xpath('.//td[4]').text
+                all_emails = elem.find_element_by_xpath('.//td[5]').text
+                all_phones = elem.find_element_by_xpath('.//td[6]').text
+                self.contact_cache.append(
+                        Contact(id=id, first_name=first_name, last_name=last_name, address=address,
+                                all_phones_from_home_page=all_phones, all_emails_from_home_page=all_emails))
+            # print(self.contact_cache)
+        return self.contact_cache
+
+    def get_contact_info_from_edit_page(self, index):
+        wd = self.app.wd
+        self.edit_contact_by_index(index)
+        id = wd.find_element_by_name('id').get_attribute('value')
+        first_name = wd.find_element_by_name('firstname').get_attribute('value')
+        last_name = wd.find_element_by_name('lastname').get_attribute('value')
+        address = wd.find_element_by_name('address').get_attribute('value')
+        mob_tel = self.clear_phone(wd.find_element_by_name('mobile').get_attribute('value'))
+        work_tel = self.clear_phone(wd.find_element_by_name('work').get_attribute('value'))
+        home_tel = self.clear_phone(wd.find_element_by_name('home').get_attribute('value'))
+        fax_tel = self.clear_phone(wd.find_element_by_name('fax').get_attribute('value'))
+        email = wd.find_element_by_name('email').get_attribute('value')
+        email2 = wd.find_element_by_name('email2').get_attribute('value')
+        email3 = wd.find_element_by_name('email3').get_attribute('value')
+        return Contact(id=id, first_name=first_name, last_name=last_name, address=address,
+                       mob_tel=mob_tel, work_tel=work_tel, home_tel=home_tel, fax_tel=fax_tel,
+                       email=email, email2=email2, email3=email3)
+
+    def get_contact_info_from_view_page(self, index):
+        wd = self.app.wd
+        self.open_contact_view_by_index(index)
+        text = wd.find_element_by_id("content").text
+        home_tel = self.clear_phone(re.search("H: (.*)", text).group(1))
+        mob_tel = self.clear_phone(re.search("M: (.*)", text).group(1))
+        work_tel = self.clear_phone(re.search("W: (.*)", text).group(1))
+        fax_tel = self.clear_phone(re.search("F: (.*)", text).group(1))
+        return Contact(mob_tel=mob_tel, work_tel=work_tel, home_tel=home_tel, fax_tel=fax_tel)
+
+    def clear_phone(self, s):
+        return re.sub("[() -]", "", s)
+
+    def merge_phones_like_on_home_page(self, contact):
+        # Соединяем телефоны в вид тел1\nтел2\nтел3 для сравнения с ячейкой где всё в 3 строки идёт
+        return "\n".join(filter(lambda x: x != "",  # не пустая строка
+                                map(lambda x: self.clear_phone(x),  # очищаем телефон от хлама
+                                    filter(lambda x: x is not None,  # телефон не None
+                                           [contact.home_tel,
+                                            contact.mob_tel,
+                                            contact.work_tel
+                                            # contact.fax_tel  #его нет на главной
+                                            ]))))
+
+    def merge_emails_like_on_home_page(self, contact):
+        return "\n".join(filter(lambda x: x != "",  # не пустая строка
+                                filter(lambda x: x is not None,  # телефон не None
+                                       [contact.email, contact.email2, contact.email3])))
