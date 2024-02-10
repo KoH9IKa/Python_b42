@@ -2,6 +2,7 @@ import time
 from model.group_info import Group
 from random import randrange
 
+
 def test_update_first_group(app):
     if app.group.count() == 0:
         app.group.add_group(amount=1)
