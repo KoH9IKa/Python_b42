@@ -4,9 +4,9 @@ from random import randrange
 # Проверка данных контакта отображаемых на addressbook/ и edit.php
 def test_check_contact_data_by_random_index(app):
     app.contact.open_contacts_page()
-    contacts = app.contact.get_contact_list()
+    contacts = app.contact.get_all_contacts_list()
     index = randrange(len(contacts))
-    contact_from_home_page = app.contact.get_contact_list()[index]
+    contact_from_home_page = app.contact.get_all_contacts_list()[index]
     contact_from_edit_page = app.contact.get_contact_info_from_edit_page(index)
     assert contact_from_home_page.id == contact_from_edit_page.id
     assert contact_from_home_page.last_name == contact_from_edit_page.last_name

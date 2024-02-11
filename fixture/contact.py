@@ -214,7 +214,8 @@ class ContactHelper:
                 self.contact_cache = None
                 self.open_contacts_page()
 
-    def get_contact_list(self):
+
+    def get_all_contacts_list(self):
         if self.contact_cache is None:
             wd = self.app.wd
             self.open_contacts_page()
