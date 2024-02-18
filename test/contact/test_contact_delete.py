@@ -43,3 +43,4 @@ def test_delete_all_contacts(app):  # Тест удаления ВСЕХ зап�
     app.contact.select_all_checkbox()
     app.contact.delete_button_in_table()
     assert app.contact.count() == 0
+
