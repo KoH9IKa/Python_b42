@@ -24,7 +24,8 @@ for o, a in opts:
 
 
 def random_names(prefix, maxlen):
-    symbols = string.ascii_letters * 5 + string.digits * 5 + "." * 5 + "-" * 5 + " " * 2
+    symbols = ("йцукенгшщзхъфывапролджэячсмитьбю"
+               + string.ascii_letters * 5 + string.digits * 5 + "." * 5 + "-" * 5 + " " * 2)
     return prefix + "".join([random.choice(symbols) for i in range(random.randrange(maxlen))])
 
 
@@ -76,5 +77,5 @@ testdata = [Contact(first_name=random_names("name", 10),
 file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", f)
 
 with open(file, "w") as out:
-    jsonpickle.set_encoder_options("json", indent=2)
+    jsonpickle.set_encoder_options("json", indent=2, ensure_ascii=False)
     out.write(jsonpickle.encode(testdata))

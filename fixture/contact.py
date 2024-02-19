@@ -4,7 +4,7 @@ from model.contact_info import Contact
 
 
 class ContactHelper:
-
+    """Класс для работы с контактами, создать/удалить/изменить и тд"""
     def __init__(self, app):
         self.app = app
         self.contact_cache = None
