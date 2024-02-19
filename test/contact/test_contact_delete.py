@@ -26,7 +26,7 @@ def test_delete_contact_by_index(app):  # Тест удаление записи
     old_contact = app.contact.get_all_contacts_list()
     index = randrange(len(old_contact))
     app.contact.delete_contact_by_index(index)
-    print("Удалён контакт с номером "+str(index))
+    print("Удалён контакт с номером "+str(index+1))
     app.contact.open_contacts_page()
     assert len(old_contact) - 1 == app.contact.count()
     new_contact = app.contact.get_all_contacts_list()
