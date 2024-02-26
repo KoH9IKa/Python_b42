@@ -11,7 +11,7 @@ contact1_id = []
 contact2_id = []
 
 
-def test_add_contact_to_created_group_and_delete_contact_from_group(app, db):
+def test_add_contact_to_created_group(app, db):
     global group_id
     global contact1_id
     global contact2_id
@@ -63,6 +63,12 @@ def test_add_contact_to_created_group_and_delete_contact_from_group(app, db):
     assert len(contacts2_in_group_db) == 2  # смотрим после добавления 1 контакта в группе их 2
     assert (sorted(contacts2_in_group_ui, key=Contact.id_or_max)
             == sorted(contacts2_in_group_db, key=Contact.id_or_max))  # сравниваем контакты через ui и db
+
+
+def test_delete_contact_from_group(app, db):
+    global group_id
+    global contact1_id
+    global contact2_id
     # 2я половина теста - удаляем из группы контакты по 1
     app.contact.remove_contact_from_group(contact1_id, group_id)
     app.contact.select_group_of_contacts_to_display(group_id)
@@ -75,6 +81,10 @@ def test_add_contact_to_created_group_and_delete_contact_from_group(app, db):
     app.contact.select_group_of_contacts_to_display(group_id)
     # нет смысла запрашивать списки так как тут ничего не должно быть в итоге
     assert len(orm.get_contacts_in_group(Group(id=group_id))) == 0
+
+
+
+
 
 
 #     # еще 1 вариант блока с удалением но используя кеш когда-то взятый,
