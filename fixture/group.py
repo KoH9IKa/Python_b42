@@ -57,14 +57,34 @@ class GroupHelper:
         self.group_cache = None
         # self.deletion_complete_message()
 
+    def delete_group_by_id(self, id):
+        wd = self.app.wd
+        self.open_groups_page()
+        self.select_group_by_id(id)
+        wd.find_element_by_xpath("(//input[@name='delete'])[1]").click()
+        self.group_cache = None
+        # self.deletion_complete_message()
+
     def select_group_by_index(self, index):
         wd = self.app.wd
         wd.find_elements_by_name("selected[]")[index].click()
+
+    def select_group_by_id(self, id):
+        wd = self.app.wd
+        self.open_groups_page()
+        # wd.find_element_by_xpath('//*[@class="group"]//*[@value="%s"]' % str(id)).click()
+        wd.find_element_by_css_selector("input[value='%s']" % id).click()
 
     def edit_group_by_index(self, index):
         wd = self.app.wd
         self.open_groups_page()
         self.select_group_by_index(index)
+        wd.find_element_by_xpath("(//input[@name='edit'])[1]").click()
+
+    def edit_group_by_id(self, id):
+        wd = self.app.wd
+        self.open_groups_page()
+        self.select_group_by_id(id)
         wd.find_element_by_xpath("(//input[@name='edit'])[1]").click()
 
     def fill_form_with_check(self, group):
@@ -157,7 +177,7 @@ class GroupHelper:
                 self.submit()
                 self.open_groups_page()
 
-    def get_group_list(self):
+    def get_groups_list(self):
         if self.group_cache is None:
             wd = self.app.wd
             self.open_groups_page()
@@ -168,4 +188,35 @@ class GroupHelper:
                 self.group_cache.append(Group(name=text, id=id))
         return self.group_cache
 
+    # wtf - what to find
+    def get_group_index_by_name(self, name):
+        wd = self.app.wd
+        n = 1
+        m = self.count()
+        # print(m)
+        while n <= m:
+            locator = f'//*[@class="group"][{n}]'
+            if wd.find_element_by_xpath(locator).text == name:
+                # print("индекс", n-1)
+                # n += 1
+                return n - 1
+            else:  # раскомментировать для отладки и ремонта
+                # print(n-1, n, "not_find")
+                n += 1
 
+    def get_group_id_by_name(self, name):
+        wd = self.app.wd
+        n = 1
+        m = self.count()
+        # print(m)
+        while n <= m:
+            locator = f'//*[@class="group"][{n}]'
+            locator_value = f'//*[@class="group"][{n}]//input'
+            if wd.find_element_by_xpath(locator).text == name:
+                # print(wd.find_element_by_xpath(locator_value).get_attribute('value'))
+                # n += 1
+                return wd.find_element_by_xpath(locator_value).get_attribute('value')
+
+            else:
+                # print(wd.find_element_by_xpath(locator).text, n, "not_find")
+                n += 1

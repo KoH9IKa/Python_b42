@@ -60,6 +60,13 @@ class ContactHelper:
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         self.contact_cache = None
 
+    def delete_contact_by_id(self, id):
+        wd = self.app.wd
+        self.open_contacts_page()
+        self.select_checkbox_by_id(id)
+        wd.find_element_by_xpath("//input[@value='Delete']").click()
+        self.contact_cache = None
+
     def select_checkbox_by_index(self, index):
         wd = self.app.wd
         # wd.find_elements_by_name("selected[]")[index].click()  # работает, но я ему не доверяю
@@ -68,11 +75,19 @@ class ContactHelper:
         locator = f'//tr[{index}]//td[1]//input[@type="checkbox"]'
         wd.find_element_by_xpath(locator).click()
 
+    def select_checkbox_by_id(self, id):
+        wd = self.app.wd
+        wd.find_element_by_xpath('//*[@name="entry"]//td//input[@value="%s"]' % id).click()
+
     def edit_contact_by_index(self, index):
         wd = self.app.wd
         index += 2
         locator = f'//tr[{index}]//td[8]//a//img'
         wd.find_element_by_xpath(locator).click()
+
+    def edit_contact_by_id(self, id):
+        wd = self.app.wd
+        wd.find_element_by_xpath('//*[@href="edit.php?id=%s"]//img' % id).click()
 
     def open_contact_view_by_index(self, index):
         wd = self.app.wd
@@ -171,49 +186,49 @@ class ContactHelper:
     def count(self):
         wd = self.app.wd
         self.open_contacts_page()
-        return len(wd.find_elements_by_name("selected[]"))
+        try:
+            return len(wd.find_elements_by_name("selected[]"))
+        except:
+            return 0
 
     def add_default_empty_contact(self, amount):
-        if self.count() < amount:
-            count = self.count()
-            while count < amount:  # создаём пока не достигнем нужного числа
-                count += 1
-                self.add_new_contact()
-                self.fill_form_with_check(Contact())
-                self.press_top_enter_button()
-                self.contact_cache = None
-                self.open_contacts_page()
+        count = self.count()
+        while count < amount:  # создаём пока не достигнем нужного числа
+            count += 1
+            self.add_new_contact()
+            self.fill_form_with_check(Contact())
+            self.press_top_enter_button()
+            self.contact_cache = None
+            self.open_contacts_page()
 
     def add_default_filled_contact(self, amount):  # в amount передаём кол-во записей которые нам нужны
-        if self.count() < amount:
-            count = self.count()
-            while count < amount:  # создаём пока не достигнем нужного числа
-                count += 1
-                # text = f'{count} - это порядковый номер'
-                text = f'{count} Фамилия'
-                self.add_new_contact()
-                self.fill_form_with_check(Contact(first_name=text,  # пока что для отслеживания - отправляем номер
-                                                  mid_name="Тестовый",
-                                                  last_name="Имя",
-                                                  nick_name="Который",
-                                                  title="Имеет",
-                                                  photo="",
-                                                  company='ОООООООЧень обычные',
-                                                  address="7777777, строки с данными",
-                                                  mob_tel="+7(123)456 78 98",
-                                                  work_tel="+7(123)456 78 99",
-                                                  home_tel="+7(123)456 78 10",
-                                                  fax_tel="+7(123)456 78 11",
-                                                  email="test@mail.ru",
-                                                  email2="test2@mail.ru",
-                                                  email3="test3@mail.ru",
-                                                  homepage_url="https:\\www.homepage2.com",
-                                                  bday="5", bmonth="5", byear="2023",  # валидный дд мм
-                                                  aday="5", amonth="5", ayear="2003"))  # валидный дд мм
-                self.press_top_enter_button()
-                self.contact_cache = None
-                self.open_contacts_page()
-
+        count = self.count()
+        while count < amount:  # создаём пока не достигнем нужного числа
+            count += 1
+            # text = f'{count} - это порядковый номер'
+            text = f'{count} Фамилия'
+            self.add_new_contact()
+            self.fill_form_with_check(Contact(first_name=text,  # пока что для отслеживания - отправляем номер
+                                              mid_name="Тестовый",
+                                              last_name="Имя",
+                                              nick_name="Который",
+                                              title="Имеет",
+                                              photo="",
+                                              company='ОООООООЧень обычные',
+                                              address="7777777, строки с данными",
+                                              mob_tel="+7(123)456 78 98",
+                                              work_tel="+7(123)456 78 99",
+                                              home_tel="+7(123)456 78 10",
+                                              fax_tel="+7(123)456 78 11",
+                                              email="test@mail.ru",
+                                              email2="test2@mail.ru",
+                                              email3="test3@mail.ru",
+                                              homepage_url="https:\\www.homepage2.com",
+                                              bday="5", bmonth="5", byear="2023",  # валидный дд мм
+                                              aday="5", amonth="5", ayear="2003"))  # валидный дд мм
+            self.press_top_enter_button()
+            self.contact_cache = None
+            self.open_contacts_page()
 
     def get_all_contacts_list(self):
         if self.contact_cache is None:
@@ -279,3 +294,71 @@ class ContactHelper:
         return "\n".join(filter(lambda x: x != "",  # не пустая строка
                                 filter(lambda x: x is not None,  # телефон не None
                                        [contact.email, contact.email2, contact.email3])))
+
+    def get_contact_index_by_firstname(self, firstname):
+        wd = self.app.wd
+        n = 1
+        m = self.count()
+        # print(m)
+        while n <= m:
+            locator = f'//*[@name="entry"][{n}]//td[3]'
+            if wd.find_element_by_xpath(locator).text == firstname:
+                # print("индекс", n-1)
+                # n += 1
+                return n - 1
+            else:  # раскомментировать для отладки и ремонта
+                # print(n-1, n, "not_find")
+                n += 1
+
+    def get_contact_id_by_firstname(self, firstname):
+        wd = self.app.wd
+        n = 1
+        m = self.count()
+        # print(m)
+        while n <= m:
+            locator = f'//*[@name="entry"][{n}]//td[3]'
+            locator_value = f'//*[@name="entry"][{n}]//td[1]//input'
+            if wd.find_element_by_xpath(locator).text == firstname:
+                #print("нашёл!")
+                return wd.find_element_by_xpath(locator_value).get_attribute("value")
+                #n += 1
+                # return wd.find_element_by_xpath(locator_value).get_attribute('value')
+
+            else:
+                # print(wd.find_element_by_xpath(locator).text, n, "not_find")
+                n += 1
+
+    def open_group_selector(self):
+        wd = self.app.wd
+        wd.find_element_by_xpath('//select[@name="to_group"]').click()
+
+    def select_group_for_contact_by_id(self, id):
+        wd = self.app.wd
+        wd.find_element_by_xpath('//select[@name="to_group"]//option[@value="%s"]' % id).click()
+
+    def add_to_group_button(self):
+        wd = self.app.wd
+        wd.find_element_by_xpath('//input[@type="submit"]').click()
+
+    # 3 метода выше объеденил в 1 на случай если надо использовать сразу все 3 со значениями id контакта и группы
+    def add_contact_to_group(self, contact_id, group_id):
+        wd = self.app.wd
+        self.select_checkbox_by_id(contact_id)
+        wd.find_element_by_xpath('//select[@name="to_group"]').click()
+        wd.find_element_by_xpath('//select[@name="to_group"]//option[@value="%s"]' % group_id).click()
+        wd.find_element_by_xpath('//input[@type="submit"]').click()
+        self.open_contacts_page()
+
+    def select_group_of_contacts_to_display(self, group_id):
+        wd = self.app.wd
+        self.open_contacts_page()
+        wd.find_element_by_xpath('//select[@name="group"]').click()
+        wd.find_element_by_xpath('//select[@name="group"]//option[@value="%s"]' % group_id).click()
+
+    def remove_contact_from_group(self, contact_id, group_id):
+        wd = self.app.wd
+        self.select_group_of_contacts_to_display(group_id)
+        self.select_checkbox_by_id(contact_id)
+        wd.find_element_by_xpath('//*[@type="submit"][@name="remove"]').click()
+        self.contact_cache = None
+        # self.open_contacts_page()

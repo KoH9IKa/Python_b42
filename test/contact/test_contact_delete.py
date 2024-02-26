@@ -1,10 +1,12 @@
+import random
 import time
 from selenium.webdriver.common.by import By
 from random import randrange
 from model.contact_info import Contact
 
 
-def test_delete_first_contact(app):  # Тест удаления первой записи
+# тест удаления первого контакта в списке в ui
+def test_delete_first_contact(app):
     if app.contact.count() < 1:
         app.contact.add_default_filled_contact(amount=2)  # делаем одну и удаляем одну
     app.contact.open_contacts_page()
@@ -19,7 +21,8 @@ def test_delete_first_contact(app):  # Тест удаления первой з
     assert old_contact == new_contact
 
 
-def test_delete_contact_by_index(app):  # Тест удаление записи по индексу
+# Тест удаления случайной записи в таблице контактов
+def test_delete_contact_by_index(app):
     if app.contact.count() < 3:
         app.contact.add_default_filled_contact(amount=5)  # делаем одну и удаляем одну
     app.contact.open_contacts_page()
@@ -35,7 +38,8 @@ def test_delete_contact_by_index(app):  # Тест удаление записи
     assert old_contact == new_contact
 
 
-def test_delete_all_contacts(app):  # Тест удаления ВСЕХ записей через чекбокс внизу страницы
+# Тест удаления ВСЕХ записей через чекбокс внизу страницы
+def test_delete_all_contacts(app):
     amount = 3
     if app.contact.count() < amount:
         app.contact.add_default_empty_contact(amount)  # делаем несколько и удаляем все
@@ -43,4 +47,20 @@ def test_delete_all_contacts(app):  # Тест удаления ВСЕХ зап�
     app.contact.select_all_checkbox()
     app.contact.delete_button_in_table()
     assert app.contact.count() == 0
+
+
+# Тест удаление записи по id записи из db с удалением через ui и сравнением данных db с db
+def test_delete_contact_by_id_comparison_db_w_db(app, db, check_ui):
+    if app.contact.count() < 3:
+        app.contact.add_default_filled_contact(amount=5)  # делаем несколько и удаляем одну
+    app.contact.open_contacts_page()
+    old_contacts = db.get_db_contacts_list()
+    contact = random.choice(old_contacts)
+    app.contact.delete_contact_by_id(contact.id)
+    old_contacts.remove(contact)
+    new_contacts = db.get_db_contacts_list()
+    assert old_contacts == new_contacts
+    app.contact.open_contacts_page()
+    if check_ui:
+        assert new_contacts == sorted(app.contact.get_all_contacts_list(), key=Contact.id_or_max)
 

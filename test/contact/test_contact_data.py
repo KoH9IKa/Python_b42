@@ -1,4 +1,5 @@
 from random import randrange
+from model.contact_info import Contact
 
 
 # Проверка данных контакта отображаемых на addressbook/ и edit.php
@@ -29,5 +30,12 @@ def test_phones_on_view_page(app):
     assert contact_from_view_page.mob_tel == contact_from_edit_page.mob_tel
     assert contact_from_view_page.work_tel == contact_from_edit_page.work_tel
     assert contact_from_view_page.fax_tel == contact_from_edit_page.fax_tel
+
+
+def test_check_data_from_contacts_page_with_data_in_db(app, db):
+    app.contact.open_contacts_page()
+    ui_contacts = app.contact.get_all_contacts_list()
+    db_contacts = db.get_db_contacts_list()
+    assert db_contacts == sorted(ui_contacts, key=Contact.id_or_max)
 
 
