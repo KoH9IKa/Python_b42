@@ -28,6 +28,8 @@ class Contact:
         self.byear = byear
         self.aday = aday
         self.bday = bday
+        # self.amonth = amonth
+        # self.bmonth = bmonth
         self.amonth = self.month_calc(amonth)
         self.bmonth = self.month_calc(bmonth)
         self.id = id
@@ -50,14 +52,17 @@ class Contact:
             return maxsize
 
     def month_calc(self, month):
-        try:
-            if month is not None:
-                month_list = ["January", "February", "March", "April", "May", "June",
-                              "July", "August", "September", "October", "November", "December"]
-                i = int(month) - 1
-                month_name = month_list[i]
-            else:
-                month_name = None
-        except:
-            month_name = ""
-        return month_name
+        if type(month) == int:
+            try:
+                if month is not None:
+                    month_list = ["January", "February", "March", "April", "May", "June",
+                                  "July", "August", "September", "October", "November", "December"]
+                    i = int(month) - 1
+                    month_name = month_list[i]
+                else:
+                    month_name = None
+            except:
+                month_name = ""
+            return month_name
+        else:
+            return month

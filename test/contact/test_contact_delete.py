@@ -8,7 +8,7 @@ from model.contact_info import Contact
 # тест удаления первого контакта в списке в ui
 def test_delete_first_contact(app):
     if app.contact.count() < 1:
-        app.contact.add_default_filled_contact(amount=2)  # делаем одну и удаляем одну
+        app.contact.add_default_filled_contact(amount=3)  # делаем одну и удаляем одну
     app.contact.open_contacts_page()
     old_contact = app.contact.get_all_contacts_list()
     app.contact.delete_first_contact()

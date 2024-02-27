@@ -35,32 +35,14 @@ class DbFixture:
             # можно использовать если нет софтделит и в поле депрекейтед будет всегда null
             # cursor.execute("select id, firstname, lastname from addressbook")
             # но на всякий случай пропишем что бы после фикса софтделита у нас не сломался тест при не null значении
-            cursor.execute("select id, firstname, lastname, address, home, mobile, work, email3, email2, email "
+            cursor.execute("select id, firstname, lastname, address, home, mobile, work, email, email2, email3 "
                            "from addressbook where deprecated is null")
             for row in cursor:
-                (id, firstname, lastname, address, home, mob, work, email, email2, email3) = row
+                (id, firstname, lastname, address, home, mobile, work, email, email2, email3) = row
                 list.append(Contact(id=str(id), first_name=firstname, last_name=lastname,
                                     address=address,
-                                    home_tel=home, mob_tel=mob, work_tel=work,
+                                    home_tel=home, mob_tel=mobile, work_tel=work,
                                     email=email, email2=email2, email3=email3))
         finally:
             cursor.close()
         return list
-
-    def get_db_contacts_list_in_group(self, group_id):
-        list = []
-        cursor = self.connection.cursor()
-        try:
-            cursor.execute("select id, firstname, lastname, address, home, mobile, work, email3, email2, email "
-                           "from addressbook where deprecated is null")
-            for row in cursor:
-                (id, firstname, lastname, address, home, mob, work, email, email2, email3) = row
-                list.append(Contact(id=str(id), first_name=firstname, last_name=lastname,
-                                    address=address,
-                                    home_tel=home, mob_tel=mob, work_tel=work,
-                                    email=email, email2=email2, email3=email3))
-        finally:
-            cursor.close()
-        return list
-
-
