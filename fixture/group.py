@@ -177,6 +177,13 @@ class GroupHelper:
                 self.submit()
                 self.open_groups_page()
 
+    def add_group_with_data(self, group):
+        self.open_groups_page()
+        self.new_group_button()
+        self.fill_form_with_check(group)
+        self.submit()
+        self.open_groups_page()
+
     def get_groups_list(self):
         if self.group_cache is None:
             wd = self.app.wd
@@ -204,19 +211,21 @@ class GroupHelper:
                 # print(n-1, n, "not_find")
                 n += 1
 
-    def get_group_id_by_name(self, name):
+    def get_group_id_from_ui_by(self, index=None, name=None):
+        """!!!ОБЯЗАТЕЛЬНО УКАЗЫВАТЬ ПАРАМЕТР ДЛЯ ПОИСКА В UI!!!
+        Ввод того по чему будем искать индекс группы, ИЛИ индекс ИЛИ имя ИЛИ что-то еще"""
         wd = self.app.wd
-        n = 1
-        m = self.count()
-        # print(m)
-        while n <= m:
-            locator = f'//*[@class="group"][{n}]'
+        if (name is not None) and (index is not None):
+            print("Единовременно можно сделать поиск только по одному параметру")
+        elif (name is not None) and (index is None):
+            for n in range(1, (self.count()+1)):
+                locator = f'//*[@class="group"][{n}]'
+                locator_value = f'//*[@class="group"][{n}]//input'
+                if wd.find_element_by_xpath(locator).text == name:
+                    return wd.find_element_by_xpath(locator_value).get_attribute('value')
+        elif (index is not None) and (name is None):
+            n = index + 1
             locator_value = f'//*[@class="group"][{n}]//input'
-            if wd.find_element_by_xpath(locator).text == name:
-                # print(wd.find_element_by_xpath(locator_value).get_attribute('value'))
-                # n += 1
-                return wd.find_element_by_xpath(locator_value).get_attribute('value')
-
-            else:
-                # print(wd.find_element_by_xpath(locator).text, n, "not_find")
-                n += 1
+            return wd.find_element_by_xpath(locator_value).get_attribute('value')
+        else:
+            print("У вас есть выбор только между index и name группы")

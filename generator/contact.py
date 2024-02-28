@@ -62,7 +62,7 @@ def random_month():
 
 
 def random_year(maxlen):
-    return "".join([random.choice(string.digits) for i in range(4)])
+    return "".join([random.choice(string.digits) for i in range(maxlen)])
 
 
 testdata = [Contact(first_name=random_names("name", 10),

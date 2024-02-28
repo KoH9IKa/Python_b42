@@ -24,6 +24,7 @@ class ContactHelper:
         wd.find_element_by_xpath("//a[normalize-space()='add next']").click()
 
     def add_new_contact(self):
+        """Просто нажатие кнопки добавления контакта на странице с контактами"""
         wd = self.app.wd
         if not wd.current_url.endswith("/edit.php"):
             self.open_contacts_page()
@@ -192,6 +193,7 @@ class ContactHelper:
             return 0
 
     def add_default_empty_contact(self, amount):
+        """Создание пустой группы в нужном количестве где amount = количество групп которое нам надо"""
         count = self.count()
         while count < amount:  # создаём пока не достигнем нужного числа
             count += 1
@@ -201,7 +203,16 @@ class ContactHelper:
             self.contact_cache = None
             self.open_contacts_page()
 
+    def add_contact_with_data(self, contact):
+        """Создание группы с конкретными переданными в contact параметрами"""
+        self.add_new_contact()
+        self.fill_form_with_check(contact)
+        self.press_top_enter_button()
+        self.contact_cache = None
+        self.open_contacts_page()
+
     def add_default_filled_contact(self, amount):  # в amount передаём кол-во записей которые нам нужны
+        """Создание дефолных групп с параметрами в указанном количестве"""
         count = self.count()
         while count < amount:  # создаём пока не достигнем нужного числа
             count += 1
@@ -310,23 +321,24 @@ class ContactHelper:
                 # print(n-1, n, "not_find")
                 n += 1
 
-    def get_contact_id_by_firstname(self, firstname):
+    def get_contact_id_from_ui_by(self, index=None, first_name=None):
+        """!!!ОБЯЗАТЕЛЬНО УКАЗЫВАТЬ ПАРАМЕТР!!!
+                    Ввод того по чему будем искать id контакта: ИЛИ индекс ИЛИ имя ИЛИ что-то еще"""
         wd = self.app.wd
-        n = 1
-        m = self.count()
-        # print(m)
-        while n <= m:
-            locator = f'//*[@name="entry"][{n}]//td[3]'
+        if (index is not None) and (first_name is not None):
+            print("Единовременно можно сделать поиск только по одному параметру")
+        elif first_name is not None:
+            for n in range(1, (self.count()+1)):
+                locator = f'//*[@name="entry"][{n}]//td[3]'
+                locator_value = f'//*[@name="entry"][{n}]//td[1]//input'
+                if wd.find_element_by_xpath(locator).text == first_name:
+                    return wd.find_element_by_xpath(locator_value).get_attribute('value')
+        elif index is not None:
+            n = index + 1
             locator_value = f'//*[@name="entry"][{n}]//td[1]//input'
-            if wd.find_element_by_xpath(locator).text == firstname:
-                #print("нашёл!")
-                return wd.find_element_by_xpath(locator_value).get_attribute("value")
-                #n += 1
-                # return wd.find_element_by_xpath(locator_value).get_attribute('value')
-
-            else:
-                # print(wd.find_element_by_xpath(locator).text, n, "not_find")
-                n += 1
+            return wd.find_element_by_xpath(locator_value).get_attribute('value')
+        else:
+            print("У вас есть выбор только между index и name группы")
 
     def open_group_selector(self):
         wd = self.app.wd
@@ -355,10 +367,36 @@ class ContactHelper:
         wd.find_element_by_xpath('//select[@name="group"]').click()
         wd.find_element_by_xpath('//select[@name="group"]//option[@value="%s"]' % group_id).click()
 
-    def remove_contact_from_group(self, contact_id, group_id):
+    def find_first_group_with_contacts(self, min_len):
         wd = self.app.wd
+        self.open_contacts_page()
+        wd.find_element_by_xpath('//select[@name="group"]').click()
+        elements = wd.find_elements_by_xpath('//select[@name="group"]//option')
+        selects = []
+        for element in elements:
+            value = element.get_attribute('value')
+            selects.append(value)
+        print(selects)
+        selects.remove("")
+        selects.remove("[none]")
+        print(selects)
+        try:
+            for select in selects:
+                wd.find_element_by_xpath('//select[@name="group"]//option[@value="%s"]' % select).click()
+                if self.count() >= min_len:
+                    return select
+        except:
+            return None
+
+    def remove_contact_from_group(self, contact_id, group_id):
         self.select_group_of_contacts_to_display(group_id)
         self.select_checkbox_by_id(contact_id)
-        wd.find_element_by_xpath('//*[@type="submit"][@name="remove"]').click()
+        self.remove_contact_from_group_button()
         self.contact_cache = None
         # self.open_contacts_page()
+
+    def remove_contact_from_group_button(self):
+        wd = self.app.wd
+        wd.find_element_by_xpath('//*[@type="submit"][@name="remove"]').click()
+        self.contact_cache = None
+
