@@ -14,7 +14,7 @@ class ContactHelper:
         wd = self.app.wd
         # open groups page with check
         if not wd.current_url.endswith("addressbook/"):
-            wd.find_element_by_link_text("home").click()
+            wd.get('http://localhost/addressbook/')
         else:
             pass  # если уже на нужной странице - пропускаем шаг
 
@@ -242,9 +242,30 @@ class ContactHelper:
             self.open_contacts_page()
 
     def get_all_contacts_list(self):
+        """Список ВСЕХ контактов на главной странице, сбрасывает положение на группе контактов(селектор)"""
         if self.contact_cache is None:
             wd = self.app.wd
             self.open_contacts_page()
+            self.contact_cache = []
+            for elem in wd.find_elements_by_xpath('//*[@id="maintable"]//tbody//tr[@name="entry"]'):
+                id = elem.find_element_by_xpath('.//td[1]//input').get_attribute("value")
+                last_name = elem.find_element_by_xpath('.//td[2]').text
+                first_name = elem.find_element_by_xpath('.//td[3]').text
+                address = elem.find_element_by_xpath('.//td[4]').text
+                all_emails = elem.find_element_by_xpath('.//td[5]').text
+                all_phones = elem.find_element_by_xpath('.//td[6]').text
+                self.contact_cache.append(
+                        Contact(id=id, first_name=first_name, last_name=last_name, address=address,
+                                all_phones_from_home_page=all_phones, all_emails_from_home_page=all_emails))
+            # print(self.contact_cache)
+        return self.contact_cache
+
+    def get_contacts_list_in_group(self):
+        """Список контактов на странице ГДЕ НАХОДИТСЯ ТЕСТ! Не все контакты,
+        а все контакты на странице группы/не группы/все контакты"""
+        self.contact_cache = None
+        if self.contact_cache is None:
+            wd = self.app.wd
             self.contact_cache = []
             for elem in wd.find_elements_by_xpath('//*[@id="maintable"]//tbody//tr[@name="entry"]'):
                 id = elem.find_element_by_xpath('.//td[1]//input').get_attribute("value")
@@ -398,5 +419,4 @@ class ContactHelper:
     def remove_contact_from_group_button(self):
         wd = self.app.wd
         wd.find_element_by_xpath('//*[@type="submit"][@name="remove"]').click()
-        self.contact_cache = None
 
