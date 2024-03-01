@@ -51,10 +51,10 @@ def test_remove_contact_from_group(app, db):
         app.contact.add_contact_to_group(contact_id, group_id)
         app.contact.open_contacts_page()
     # с этого момента начинается сам тест
-    app.contact.select_group_of_contacts_to_display(group_id)
     # открываем группу, где есть контакты
-    contacts_in_group_ui = app.contact.get_contacts_list_in_group()
+    app.contact.select_group_of_contacts_to_display(group_id)
     # сравниваем контакты в группе до удаления контакта
+    contacts_in_group_ui = app.contact.get_contacts_list_in_group()
     contacts_in_group_db = orm.get_contacts_in_group(Group(id=group_id))
     assert (sorted(contacts_in_group_ui, key=Contact.id_or_max)
             == sorted(contacts_in_group_db, key=Contact.id_or_max))
