@@ -5,16 +5,17 @@ from model.contact_info import Contact
 
 class ContactHelper:
     """Класс для работы с контактами, создать/удалить/изменить и тд"""
-    def __init__(self, app):
+    def __init__(self, app, base_url):
         self.app = app
         self.contact_cache = None
+        self.base_url = base_url
         # contact_cache = None
 
     def open_contacts_page(self):
         wd = self.app.wd
         # open groups page with check
         if not wd.current_url.endswith("addressbook/"):
-            wd.get('http://localhost/addressbook/')
+            wd.get(self.base_url)
         else:
             pass  # если уже на нужной странице - пропускаем шаг
 

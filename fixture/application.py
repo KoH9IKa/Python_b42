@@ -18,7 +18,7 @@ class Application:
         self.wd.implicitly_wait(0.5)
         self.session = SessionHelper(self)
         self.group = GroupHelper(self)
-        self.contact = ContactHelper(self)
+        self.contact = ContactHelper(self, base_url)
         self.base_url = base_url
 
     def is_valid(self):
