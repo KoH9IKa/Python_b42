@@ -1,7 +1,7 @@
 from random import randrange
 from model.contact_info import Contact
 from fixture.orm import ORMFixture
-orm = ORMFixture(host="127.0.0.1", name="addressbook", user="root", password="")
+# orm = ORMFixture(host="127.0.0.1", name="addressbook", user="root", password="")
 
 
 # Проверка данных контакта отображаемых на addressbook/ и edit.php
@@ -44,5 +44,5 @@ def test_check_data_from_contacts_page_with_data_in_db(app, db):
         db_phones.append(app.contact.merge_phones_like_on_home_page(db_contact))  # тут собираем через моржа телефоны
         db_emails.append(app.contact.merge_emails_like_on_home_page(db_contact))  # а тут собираем почты
     for index in range(0, (len(contacts_homepage))):  # теперь у нас есть 3 одинаковых списка с одинаковым range (наверное)
-        assert contacts_homepage[index].all_emails_from_home_page == db_emails[index] # в каждом контакте проверяем его олл имейлз с такой же строкой из базы
-        assert contacts_homepage[index].all_phones_from_home_page == db_phones[index] # тоже самое для телефонов
+        assert contacts_homepage[index].all_emails_from_home_page == db_emails[index]  # в каждом контакте проверяем его олл имейлз с такой же строкой из базы
+        assert contacts_homepage[index].all_phones_from_home_page == db_phones[index]  # тоже самое для телефонов

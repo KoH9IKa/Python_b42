@@ -236,8 +236,8 @@ class ContactHelper:
                                               email2="test2@mail.ru",
                                               email3="test3@mail.ru",
                                               homepage_url="https:\\www.homepage2.com",
-                                              bday="5", bmonth="5", byear="2023",  # валидный дд мм
-                                              aday="5", amonth="5", ayear="2003"))  # валидный дд мм
+                                              bday="3", bmonth=3, byear="2023",  # валидный дд мм
+                                              aday="5", amonth=5, ayear="2003"))  # валидный дд мм
             self.press_top_enter_button()
             self.contact_cache = None
             self.open_contacts_page()
