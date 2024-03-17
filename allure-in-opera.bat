@@ -1,0 +1,1 @@
+"C:\Program Files\Opera GX\launcher.exe" -allow-file-access-from-files "C:\PycharmProjects\Python_b42\allure-report\index.html"

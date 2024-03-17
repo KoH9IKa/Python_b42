@@ -1,0 +1,4 @@
+"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
+"passed","Sun Mar 17 16:54:01 MSK 2024","Sun Mar 17 16:54:04 MSK 2024","3181","test.group","test_group_delete","","","","test_delete_random_group_in_ui",""
+"passed","Sun Mar 17 16:53:55 MSK 2024","Sun Mar 17 16:54:01 MSK 2024","5852","test.group","test_group_delete","","","","test_delete_first_group_in_ui",""
+"passed","Sun Mar 17 16:54:04 MSK 2024","Sun Mar 17 16:54:05 MSK 2024","377","test.group","test_group_delete","","","","test_delete_random_group_in_db",""
