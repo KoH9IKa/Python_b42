@@ -5,3 +5,4 @@ urllib3==1.26.16
 jsonpickle==3.0.3
 pony==0.7.17
 pymysql==1.1.0
+allure-pytest==2.13.3
